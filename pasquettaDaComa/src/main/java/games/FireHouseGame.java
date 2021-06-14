@@ -3,15 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package di.uniba.map.b.adventure.games;
+package games;
 
-import di.uniba.map.b.adventure.GameDescription;
-import di.uniba.map.b.adventure.parser.ParserOutput;
-import di.uniba.map.b.adventure.type.AdvObject;
-import di.uniba.map.b.adventure.type.AdvObjectContainer;
-import di.uniba.map.b.adventure.type.Command;
-import di.uniba.map.b.adventure.type.CommandType;
-import di.uniba.map.b.adventure.type.Room;
+import adventure.GameDescription;
+import parser.ParserOutput;
+import type.AdvObject;
+import type.AdvObjectContainer;
+import type.Command;
+import type.CommandType;
+import type.Room;
 import java.io.PrintStream;
 import java.util.Iterator;
 

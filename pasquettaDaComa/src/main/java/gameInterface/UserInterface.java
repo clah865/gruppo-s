@@ -5,6 +5,8 @@
  */
 package gameInterface;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Lenovo
@@ -29,135 +31,145 @@ public class UserInterface extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jTextField1 = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        gameTextArea = new javax.swing.JTextArea();
+        gameTextField = new javax.swing.JTextField();
+        sendButton = new javax.swing.JButton();
+        currentRoomTitleLabel = new javax.swing.JLabel();
+        gameTimeLabel = new javax.swing.JLabel();
+        gameTimeTitleLabel = new javax.swing.JLabel();
+        currentRoomLabel = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
-        jLabel5 = new javax.swing.JLabel();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
+        borselloTextArea = new javax.swing.JTextArea();
+        borselloTitleLabel = new javax.swing.JLabel();
+        menuBar = new javax.swing.JMenuBar();
+        helpMenu = new javax.swing.JMenu();
+        helpMenuCommandsList = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(0, 0, 0));
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        setPreferredSize(new java.awt.Dimension(811, 469));
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(0, 0, 0));
         jPanel1.setPreferredSize(new java.awt.Dimension(804, 560));
 
-        jTextArea1.setEditable(false);
-        jTextArea1.setBackground(new java.awt.Color(0, 0, 0));
-        jTextArea1.setColumns(20);
-        jTextArea1.setForeground(new java.awt.Color(255, 255, 255));
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        gameTextArea.setEditable(false);
+        gameTextArea.setBackground(new java.awt.Color(0, 0, 0));
+        gameTextArea.setColumns(20);
+        gameTextArea.setForeground(new java.awt.Color(255, 255, 255));
+        gameTextArea.setRows(5);
+        jScrollPane1.setViewportView(gameTextArea);
 
-        jTextField1.setBackground(new java.awt.Color(0, 0, 0));
-        jTextField1.setForeground(new java.awt.Color(255, 255, 255));
+        gameTextField.setBackground(new java.awt.Color(0, 0, 0));
+        gameTextField.setForeground(new java.awt.Color(255, 255, 255));
 
-        jButton2.setBackground(new java.awt.Color(0, 0, 0));
-        jButton2.setForeground(new java.awt.Color(102, 102, 102));
-        jButton2.setLabel("Invia");
+        sendButton.setBackground(new java.awt.Color(0, 0, 0));
+        sendButton.setForeground(new java.awt.Color(102, 102, 102));
+        sendButton.setLabel("Invia");
 
-        jLabel1.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Stanza Corrente");
+        currentRoomTitleLabel.setBackground(new java.awt.Color(255, 255, 255));
+        currentRoomTitleLabel.setForeground(new java.awt.Color(255, 255, 255));
+        currentRoomTitleLabel.setText("Stanza Corrente");
 
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Default");
+        gameTimeLabel.setForeground(new java.awt.Color(255, 255, 255));
+        gameTimeLabel.setText("*DEFAULT*");
 
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("Tempo di Gioco");
+        gameTimeTitleLabel.setForeground(new java.awt.Color(255, 255, 255));
+        gameTimeTitleLabel.setText("Tempo di Gioco");
 
-        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setText("Default");
+        currentRoomLabel.setForeground(new java.awt.Color(255, 255, 255));
+        currentRoomLabel.setText("*DEFAULT*");
 
-        jTextArea2.setEditable(false);
-        jTextArea2.setBackground(new java.awt.Color(0, 0, 0));
-        jTextArea2.setColumns(16);
-        jTextArea2.setForeground(new java.awt.Color(102, 102, 102));
-        jTextArea2.setRows(5);
-        jScrollPane2.setViewportView(jTextArea2);
+        borselloTextArea.setEditable(false);
+        borselloTextArea.setBackground(new java.awt.Color(0, 0, 0));
+        borselloTextArea.setColumns(16);
+        borselloTextArea.setForeground(new java.awt.Color(102, 102, 102));
+        borselloTextArea.setRows(5);
+        jScrollPane2.setViewportView(borselloTextArea);
 
-        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setText("Borsello:");
+        borselloTitleLabel.setForeground(new java.awt.Color(255, 255, 255));
+        borselloTitleLabel.setText("Borsello:");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(26, 26, 26)
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(gameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(48, 48, 48)
-                        .addComponent(jButton2))
+                        .addComponent(sendButton))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 514, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(112, 112, 112))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(65, 65, 65))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(27, 27, 27))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(79, 79, 79)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel3)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel4)
-                                        .addGap(32, 32, 32))))
+                                .addGap(95, 95, 95)
+                                .addComponent(borselloTitleLabel))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(77, 77, 77)
-                                .addComponent(jLabel5)))
-                        .addContainerGap())))
+                                .addGap(70, 70, 70)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(gameTimeTitleLabel)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(currentRoomLabel)
+                                        .addGap(17, 17, 17)))))
+                        .addContainerGap(74, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(currentRoomTitleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(53, 53, 53))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(gameTimeLabel)
+                                .addGap(93, 93, 93))))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(21, 21, 21)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(gameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(sendButton)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel3)
+                        .addGap(21, 21, 21)
+                        .addComponent(gameTimeTitleLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel2)
+                        .addComponent(gameTimeLabel)
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel1)
+                        .addComponent(currentRoomTitleLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(58, 58, 58)
-                        .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(currentRoomLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(49, 49, 49)
+                        .addComponent(borselloTitleLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(21, 21, 21)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2))
                 .addContainerGap(28, Short.MAX_VALUE))
         );
 
-        jMenu1.setText("Help");
-        jMenuBar1.add(jMenu1);
+        helpMenu.setText("Help");
 
-        setJMenuBar(jMenuBar1);
+        helpMenuCommandsList.setText("Lista comandi");
+        helpMenuCommandsList.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                helpMenuCommandsListActionPerformed(evt);
+            }
+        });
+        helpMenu.add(helpMenuCommandsList);
+
+        menuBar.add(helpMenu);
+
+        setJMenuBar(menuBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -174,6 +186,42 @@ public class UserInterface extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void helpMenuCommandsListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_helpMenuCommandsListActionPerformed
+        JOptionPane.showMessageDialog(this,
+
+            "\t\t--- Come giocare ad Hive Mind ---\n"
+            + "\n"
+            + "E' possibile usare questi comandi testuali anche senza premere i relativi pulsanti:\n"
+            + "\n"
+            + ">> nord - Spostati in direzione nord\n"
+            + ">> est - Spostati in direzione est\n"
+            + ">> ovest - Spostati in direzione ovest\n"
+            + ">> sud - Spostati in direzione sud\n"
+            + ">> osserva - permette di guardarti intorno ed esaminare l'ambiente circostante\n"
+            + ">> carica - carica un salvataggio\n"
+            + ">> salva - salva la partita corrente\n"
+            + ">> help - stampa una lista dei comandi\n"
+            + "\n"
+            + "Altri comandi:\n"
+            + "\n"
+            + ">> esamina [qualcosa] - esamina qualcosa presente nella stanza, o prendi oggetti da un cadavere\n"
+            + ">> inventario - visualizza l'inventario\n"
+            + ">> equipaggia [oggetto] - equipaggia un oggetto dell'inventario (massimo 2 alla volta)\n"
+            + ">> togli [oggetto] - disequipaggia un oggetto\n"
+            + ">> apri [oggetto contenitore] - apri un oggetto specifico\n"
+            + ">> chiudi [oggetto contenitore] - chiudi un oggetto specifico\n"
+            + ">> lascia [oggetto] - lascia un oggetto in una stanza\n"
+            + ">> metti [oggetto] in [oggetto contenitore] - metti un oggetto in un contenitore valido\n"
+            + ">> prendi [oggetto] - prendi un oggetto a terra nella stanza o in un contenitore\n"
+            + ">> parla a [personaggio] - parla ad un personaggio nella stanza\n"
+            + ">> dai [oggetto] a [persona] - dai un oggetto nel tuo inventario ad un personaggio\n"
+            + ">> usa [oggetto] -  usa oggetti esterni al tuo inventario\n"
+            + "Altri comandi più specifici dovranno essere trovati dal giocatore.\n"
+            + "\n"
+            + "Per salvare o caricare una partita, sovrascrivere il file HiveMindGame.dat situato in\n"
+            + "../hivemind/hivemind/HiveMindGame.dat", "Lista comandi", JOptionPane.PLAIN_MESSAGE);
+    }//GEN-LAST:event_helpMenuCommandsListActionPerformed
 
     /**
      * @param args the command line arguments
@@ -212,19 +260,20 @@ public class UserInterface extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton2;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JTextArea borselloTextArea;
+    private javax.swing.JLabel borselloTitleLabel;
+    private javax.swing.JLabel currentRoomLabel;
+    private javax.swing.JLabel currentRoomTitleLabel;
+    private javax.swing.JTextArea gameTextArea;
+    private javax.swing.JTextField gameTextField;
+    private javax.swing.JLabel gameTimeLabel;
+    private javax.swing.JLabel gameTimeTitleLabel;
+    private javax.swing.JMenu helpMenu;
+    private javax.swing.JMenuItem helpMenuCommandsList;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextArea jTextArea2;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JMenuBar menuBar;
+    private javax.swing.JButton sendButton;
     // End of variables declaration//GEN-END:variables
 }

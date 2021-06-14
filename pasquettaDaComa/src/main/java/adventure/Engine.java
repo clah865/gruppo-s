@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package di.uniba.map.b.adventure;
+package adventure;
 
-import di.uniba.map.b.adventure.games.FireHouseGame;
-import di.uniba.map.b.adventure.parser.Parser;
-import di.uniba.map.b.adventure.parser.ParserOutput;
-import di.uniba.map.b.adventure.type.CommandType;
+import games.FireHouseGame;
+import parser.Parser;
+import parser.ParserOutput;
+import type.CommandType;
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
