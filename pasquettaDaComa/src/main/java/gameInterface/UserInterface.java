@@ -5,19 +5,49 @@
  */
 package gameInterface;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
  *
- * @author Lenovo
+ * @author Clah865
  */
 public class UserInterface extends javax.swing.JFrame {
+
+    public class Timer extends Thread {
+
+        @Override
+        public void run() {
+            long tIniziale;
+            tIniziale = System.currentTimeMillis();
+
+            long tTrascorso, tPrecedente = 0;
+            while (true) {
+                tTrascorso = System.currentTimeMillis() - tIniziale + tPrecedente;
+                int decimi = (int) ((tTrascorso % 1000) / 100);
+                int secondi = (int) (tTrascorso / 1000 % 60);
+                int minuti = (int) (tTrascorso / 60000 % 60);
+                String tDisplay = String.format("%02d:%02d.%d", minuti, secondi, decimi);
+                try {
+                    Timer.sleep(100);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(UserInterface.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                gameTimeLabel.setText(tDisplay);
+                tPrecedente = tTrascorso;
+
+            }
+        }
+    }
 
     /**
      * Creates new form userInterface
      */
     public UserInterface() {
         initComponents();
+        (new Timer()).start();
+
     }
 
     /**
@@ -65,19 +95,24 @@ public class UserInterface extends javax.swing.JFrame {
 
         sendButton.setBackground(new java.awt.Color(0, 0, 0));
         sendButton.setForeground(new java.awt.Color(102, 102, 102));
+        sendButton.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
         sendButton.setLabel("Invia");
 
         currentRoomTitleLabel.setBackground(new java.awt.Color(255, 255, 255));
         currentRoomTitleLabel.setForeground(new java.awt.Color(255, 255, 255));
+        currentRoomTitleLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         currentRoomTitleLabel.setText("Stanza Corrente");
 
         gameTimeLabel.setForeground(new java.awt.Color(255, 255, 255));
+        gameTimeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         gameTimeLabel.setText("*DEFAULT*");
 
         gameTimeTitleLabel.setForeground(new java.awt.Color(255, 255, 255));
+        gameTimeTitleLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         gameTimeTitleLabel.setText("Tempo di Gioco");
 
         currentRoomLabel.setForeground(new java.awt.Color(255, 255, 255));
+        currentRoomLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         currentRoomLabel.setText("*DEFAULT*");
 
         borselloTextArea.setEditable(false);
@@ -88,6 +123,7 @@ public class UserInterface extends javax.swing.JFrame {
         jScrollPane2.setViewportView(borselloTextArea);
 
         borselloTitleLabel.setForeground(new java.awt.Color(255, 255, 255));
+        borselloTitleLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         borselloTitleLabel.setText("Borsello:");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -95,40 +131,22 @@ public class UserInterface extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(15, 15, 15)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(gameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(48, 48, 48)
-                        .addComponent(sendButton))
+                        .addComponent(gameTextField)
+                        .addGap(18, 18, 18)
+                        .addComponent(sendButton, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 514, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(95, 95, 95)
-                                .addComponent(borselloTitleLabel))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(70, 70, 70)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(gameTimeTitleLabel)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(currentRoomLabel)
-                                        .addGap(17, 17, 17)))))
-                        .addContainerGap(74, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(40, 40, 40)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(currentRoomTitleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(53, 53, 53))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(gameTimeLabel)
-                                .addGap(93, 93, 93))))))
+                .addGap(33, 33, 33)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(currentRoomLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(currentRoomTitleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2)
+                    .addComponent(gameTimeTitleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(gameTimeLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(borselloTitleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 36, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -137,24 +155,24 @@ public class UserInterface extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(21, 21, 21)
+                        .addGap(17, 17, 17)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(gameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(sendButton)))
+                            .addComponent(sendButton, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(21, 21, 21)
-                        .addComponent(gameTimeTitleLabel)
+                        .addGap(27, 27, 27)
+                        .addComponent(gameTimeTitleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(gameTimeLabel)
                         .addGap(18, 18, 18)
                         .addComponent(currentRoomTitleLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(currentRoomLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(49, 49, 49)
+                        .addGap(46, 46, 46)
                         .addComponent(borselloTitleLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
 
         helpMenu.setText("Help");
@@ -189,38 +207,37 @@ public class UserInterface extends javax.swing.JFrame {
 
     private void helpMenuCommandsListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_helpMenuCommandsListActionPerformed
         JOptionPane.showMessageDialog(this,
-
-            "\t\t--- Come giocare ad Hive Mind ---\n"
-            + "\n"
-            + "E' possibile usare questi comandi testuali anche senza premere i relativi pulsanti:\n"
-            + "\n"
-            + ">> nord - Spostati in direzione nord\n"
-            + ">> est - Spostati in direzione est\n"
-            + ">> ovest - Spostati in direzione ovest\n"
-            + ">> sud - Spostati in direzione sud\n"
-            + ">> osserva - permette di guardarti intorno ed esaminare l'ambiente circostante\n"
-            + ">> carica - carica un salvataggio\n"
-            + ">> salva - salva la partita corrente\n"
-            + ">> help - stampa una lista dei comandi\n"
-            + "\n"
-            + "Altri comandi:\n"
-            + "\n"
-            + ">> esamina [qualcosa] - esamina qualcosa presente nella stanza, o prendi oggetti da un cadavere\n"
-            + ">> inventario - visualizza l'inventario\n"
-            + ">> equipaggia [oggetto] - equipaggia un oggetto dell'inventario (massimo 2 alla volta)\n"
-            + ">> togli [oggetto] - disequipaggia un oggetto\n"
-            + ">> apri [oggetto contenitore] - apri un oggetto specifico\n"
-            + ">> chiudi [oggetto contenitore] - chiudi un oggetto specifico\n"
-            + ">> lascia [oggetto] - lascia un oggetto in una stanza\n"
-            + ">> metti [oggetto] in [oggetto contenitore] - metti un oggetto in un contenitore valido\n"
-            + ">> prendi [oggetto] - prendi un oggetto a terra nella stanza o in un contenitore\n"
-            + ">> parla a [personaggio] - parla ad un personaggio nella stanza\n"
-            + ">> dai [oggetto] a [persona] - dai un oggetto nel tuo inventario ad un personaggio\n"
-            + ">> usa [oggetto] -  usa oggetti esterni al tuo inventario\n"
-            + "Altri comandi più specifici dovranno essere trovati dal giocatore.\n"
-            + "\n"
-            + "Per salvare o caricare una partita, sovrascrivere il file HiveMindGame.dat situato in\n"
-            + "../hivemind/hivemind/HiveMindGame.dat", "Lista comandi", JOptionPane.PLAIN_MESSAGE);
+                "\t\t--- Come giocare ad Hive Mind ---\n"
+                + "\n"
+                + "E' possibile usare questi comandi testuali anche senza premere i relativi pulsanti:\n"
+                + "\n"
+                + ">> nord - Spostati in direzione nord\n"
+                + ">> est - Spostati in direzione est\n"
+                + ">> ovest - Spostati in direzione ovest\n"
+                + ">> sud - Spostati in direzione sud\n"
+                + ">> osserva - permette di guardarti intorno ed esaminare l'ambiente circostante\n"
+                + ">> carica - carica un salvataggio\n"
+                + ">> salva - salva la partita corrente\n"
+                + ">> help - stampa una lista dei comandi\n"
+                + "\n"
+                + "Altri comandi:\n"
+                + "\n"
+                + ">> esamina [qualcosa] - esamina qualcosa presente nella stanza, o prendi oggetti da un cadavere\n"
+                + ">> inventario - visualizza l'inventario\n"
+                + ">> equipaggia [oggetto] - equipaggia un oggetto dell'inventario (massimo 2 alla volta)\n"
+                + ">> togli [oggetto] - disequipaggia un oggetto\n"
+                + ">> apri [oggetto contenitore] - apri un oggetto specifico\n"
+                + ">> chiudi [oggetto contenitore] - chiudi un oggetto specifico\n"
+                + ">> lascia [oggetto] - lascia un oggetto in una stanza\n"
+                + ">> metti [oggetto] in [oggetto contenitore] - metti un oggetto in un contenitore valido\n"
+                + ">> prendi [oggetto] - prendi un oggetto a terra nella stanza o in un contenitore\n"
+                + ">> parla a [personaggio] - parla ad un personaggio nella stanza\n"
+                + ">> dai [oggetto] a [persona] - dai un oggetto nel tuo inventario ad un personaggio\n"
+                + ">> usa [oggetto] -  usa oggetti esterni al tuo inventario\n"
+                + "Altri comandi più specifici dovranno essere trovati dal giocatore.\n"
+                + "\n"
+                + "Per salvare o caricare una partita, sovrascrivere il file HiveMindGame.dat situato in\n"
+                + "../hivemind/hivemind/HiveMindGame.dat", "Lista comandi", JOptionPane.PLAIN_MESSAGE);
     }//GEN-LAST:event_helpMenuCommandsListActionPerformed
 
     /**
