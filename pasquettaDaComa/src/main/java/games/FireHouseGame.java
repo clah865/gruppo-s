@@ -50,7 +50,7 @@ public class FireHouseGame extends GameDescription {
         ovest.setAlias(new String[]{"o", "O", "Ovest", "OVEST"});
         getCommands().add(ovest);
         Command end = new Command(CommandType.END, "end");
-        end.setAlias(new String[]{"end", "fine", "esci", "muori", "ammazzati", "ucciditi", "suicidati","exit"});
+        end.setAlias(new String[]{"end", "fine", "esci", "muori", "ammazzati", "ucciditi", "suicidati", "exit"});
         getCommands().add(end);
         Command look = new Command(CommandType.LOOK_AT, "osserva");
         look.setAlias(new String[]{"guarda", "vedi", "trova", "cerca", "descrivi"});
@@ -62,21 +62,27 @@ public class FireHouseGame extends GameDescription {
         open.setAlias(new String[]{});
         getCommands().add(open);
         Command push = new Command(CommandType.PUSH, "premi");
-        push.setAlias(new String[]{"spingi","attiva"});
+        push.setAlias(new String[]{"spingi", "attiva"});
         getCommands().add(push);
         //Rooms
-        Room hall = new Room(0, "Corridoio", "Sei appena tornato a casa e non sai cosa fare. Ti ricordi che non hai ancora aperto quel fantastico regalo di tua zia Lina."
-                + " Sarà il caso di cercarlo e di giocarci!");
-        hall.setLook("Sei nel corridoio, a nord vedi il bagno, a sud il soggiorno e ad ovest la tua cameretta, forse il gioco sarà lì?");
-        Room livingRoom = new Room(1, "Soggiorno", "Ti trovi nel soggiorno. Ci sono quei mobili marrone scuro che hai sempre odiato e delle orribili sedie.");
-        livingRoom.setLook("Non c'è nulla di interessante qui.");
-        Room kitchen = new Room(2, "Cucina", "Ti trovi nella solita cucina. Mobili bianchi, maniglie azzurre, quello strano lampadario che adoravi tanto quando eri piccolo. "
-                + "C'è un tavolo con un bel portafrutta e una finestra.");
-        kitchen.setLook("La solita cucina, ma noti una chiave vicino al portafrutta.");
-        Room bathroom = new Room(3, "Bagno", "Sei nel bagno. Quanto tempo passato qui dentro...meglio non pensarci...");
-        bathroom.setLook("Vedo delle batterie sul mobile alla destra del lavandino.");
-        Room yourRoom = new Room(4, "La tua cameratta", "Finalmente la tua cameretta! Questo luogo ti è così famigliare...ma non ricordi dove hai messo il nuovo regalo di zia Lina.");
-        yourRoom.setLook("C'è un armadio bianco, di solito conservi lì i tuoi giochi.");
+        Room forest = new Room(0, "Mercadante", "E' pasquestta e stranamente non piove. Sei nella famosa foresta di Mercadante con il tuo gruppo di amici "
+                + "e dopo qualche birra di troppo iniziate a giocare con la palla. Senza motivo afferri la palla e la calci troppo lontano...");
+        forest.setLook("Non c'è niente da osservare! Vai a prendere la palla prima che i tuoi amici inzino ad agitarsi");
+        Room garden = new Room(1, "Giardino", "Recuperando la palla non hai visto dove mettevi i piedi sei inciampato e hai battuto la testa e "
+                + "ti sei risvegliato all'estreno dell'unco bar presente nella foresta");
+        garden.setLook("Proprio accanto a te noti delle giostrine per bambini mentre vicino l'ingresso, a nord, "
+                + "c'è una veranda con dei tavoli apparecchiati. Ma... a terra c'è il tuo telefono!");
+        Room mainRoom = new Room(2, "Stanza principale", "Entrando la porta alle tue spalle si chiude senza darti possibilità di uscita. "
+                + "All'interno sembra un classico bar, stranamente però manca il bancone e il frigo delle birre è vuoto");
+        mainRoom.setLook("Noti una macchinetta del caffè proprio identica a quella del dipartimento di informatica e ci sono due porte una ad est e l'altra ad ovest.");
+        Room warehouse = new Room(3, "Magazzino", "E' un magazzino, niente di più niente di meno...");
+        warehouse.setLook("Ci sono dei tavolini e sedie di scorta, sotto uno di questi tavoli c'è nascasta una cassaforte."
+                + " A sud scorgi una strana porta, quasi futuristica, diversa dalla porta ad est che riconduce alla stanza principale.");
+        Room office = new Room(4, "Ufficio", "E' un ufficio arredato in stile 'Il Padrino', c'è odore di sigaro nell'aria...");
+        office.setLook("Sono presenti diverse poltrone in pelle, una classica scrivania e sul muro è appesa una bacheca. Non ci sono finestre, "
+                + "è presente solo una lampada da scrivania e l'unica porta presente è quella a nord che ti riconduce al magazzino. (Chissà che affari loschi conducono qui)");
+        Room bossRoom = new Room (5, "Area ristorante", "E' l'area che il bar utilizza come ristorante. Che fame...");
+        bossRoom.setLook("Sono presenti tanti tavoli apparecchiati e arriva una forte luce dalla vetrata. C'è un uomo con la mascherina seduto ad un tavolo!");
         //maps
         kitchen.setEast(livingRoom);
         livingRoom.setNorth(hall);
