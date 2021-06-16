@@ -19,23 +19,24 @@ public class UserInterface extends javax.swing.JFrame {
 
         @Override
         public void run() {
-            long tIniziale;
-            tIniziale = System.currentTimeMillis();
 
-            long tTrascorso, tPrecedente = 0;
+            int secondi = 0;
+            int minuti = 0;
             while (true) {
-                tTrascorso = System.currentTimeMillis() - tIniziale + tPrecedente;
-                int decimi = (int) ((tTrascorso % 1000) / 100);
-                int secondi = (int) (tTrascorso / 1000 % 60);
-                int minuti = (int) (tTrascorso / 60000 % 60);
-                String tDisplay = String.format("%02d:%02d.%d", minuti, secondi, decimi);
+                if (secondi < 59) {
+                    secondi++;
+                } else {
+                    secondi = 0;
+                    minuti++;
+                }
+
+                String tDisplay = String.format("%02d:%02d", minuti, secondi);
                 try {
-                    Timer.sleep(100);
+                    Timer.sleep(1000);
                 } catch (InterruptedException ex) {
                     Logger.getLogger(UserInterface.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 gameTimeLabel.setText(tDisplay);
-                tPrecedente = tTrascorso;
 
             }
         }
@@ -74,6 +75,7 @@ public class UserInterface extends javax.swing.JFrame {
         menuBar = new javax.swing.JMenuBar();
         helpMenu = new javax.swing.JMenu();
         helpMenuCommandsList = new javax.swing.JMenuItem();
+        abautMenu = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(0, 0, 0));
@@ -172,7 +174,7 @@ public class UserInterface extends javax.swing.JFrame {
                         .addComponent(borselloTitleLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
 
         helpMenu.setText("Help");
@@ -184,6 +186,14 @@ public class UserInterface extends javax.swing.JFrame {
             }
         });
         helpMenu.add(helpMenuCommandsList);
+
+        abautMenu.setText("Abaut");
+        abautMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                abautMenuActionPerformed(evt);
+            }
+        });
+        helpMenu.add(abautMenu);
 
         menuBar.add(helpMenu);
 
@@ -207,25 +217,19 @@ public class UserInterface extends javax.swing.JFrame {
 
     private void helpMenuCommandsListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_helpMenuCommandsListActionPerformed
         JOptionPane.showMessageDialog(this,
-                "\t\t--- Come giocare ad Hive Mind ---\n"
+                "\t\t--- Come giocare ad Pasquetta da Coma ---\n"
                 + "\n"
-                + "E' possibile usare questi comandi testuali anche senza premere i relativi pulsanti:\n"
+                + "Utilizza questi comandi per spostarti nelle varie stanze:\n"
                 + "\n"
                 + ">> nord - Spostati in direzione nord\n"
                 + ">> est - Spostati in direzione est\n"
                 + ">> ovest - Spostati in direzione ovest\n"
                 + ">> sud - Spostati in direzione sud\n"
-                + ">> osserva - permette di guardarti intorno ed esaminare l'ambiente circostante\n"
-                + ">> carica - carica un salvataggio\n"
-                + ">> salva - salva la partita corrente\n"
-                + ">> help - stampa una lista dei comandi\n"
                 + "\n"
                 + "Altri comandi:\n"
-                + "\n"
-                + ">> esamina [qualcosa] - esamina qualcosa presente nella stanza, o prendi oggetti da un cadavere\n"
-                + ">> inventario - visualizza l'inventario\n"
-                + ">> equipaggia [oggetto] - equipaggia un oggetto dell'inventario (massimo 2 alla volta)\n"
-                + ">> togli [oggetto] - disequipaggia un oggetto\n"
+                + ">> osserva - permette di guardarti intorno ed esaminare l'ambiente circostante\n"
+                + ">> help - stampa una lista dei comandi\n"
+                + ">> esamina [qualcosa] - esamina qualcosa presente nella stanza\n"
                 + ">> apri [oggetto contenitore] - apri un oggetto specifico\n"
                 + ">> chiudi [oggetto contenitore] - chiudi un oggetto specifico\n"
                 + ">> lascia [oggetto] - lascia un oggetto in una stanza\n"
@@ -233,12 +237,23 @@ public class UserInterface extends javax.swing.JFrame {
                 + ">> prendi [oggetto] - prendi un oggetto a terra nella stanza o in un contenitore\n"
                 + ">> parla a [personaggio] - parla ad un personaggio nella stanza\n"
                 + ">> dai [oggetto] a [persona] - dai un oggetto nel tuo inventario ad un personaggio\n"
-                + ">> usa [oggetto] -  usa oggetti esterni al tuo inventario\n"
+                + ">> usa [oggetto] -  usa oggetti presenti nel tuo inventario\n"
                 + "Altri comandi più specifici dovranno essere trovati dal giocatore.\n"
-                + "\n"
-                + "Per salvare o caricare una partita, sovrascrivere il file HiveMindGame.dat situato in\n"
-                + "../hivemind/hivemind/HiveMindGame.dat", "Lista comandi", JOptionPane.PLAIN_MESSAGE);
+                + "\n");
     }//GEN-LAST:event_helpMenuCommandsListActionPerformed
+
+    private void abautMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abautMenuActionPerformed
+        JOptionPane.showMessageDialog(this, "Pasquetta da Coma è un gioco d'avventura testuale, nel quale puoi\n"
+                + "inserire dei comandi testuali per esplorare l'ambiente che ti viene descritto e\n"
+                + "raccogliere ed utilizzare oggetti presenti nella mappa e\n"
+                + "risolvere enigmi presenti nel gioco.\n"
+                + "\n"
+                + "Il gioco racconta la storia tramite le descrizioni di alcuni oggetti, che saranno\n"
+                + "è necessario sfruttare tali descrizioni anche per poter procedere nel gioco, o per scoprire\n"
+                + "ulteriori dettagli.\n"
+                + "E qualunque cosa dovesse succedere:\n\n"
+                + "Non dimenticare di fare la scelta che ritieni piu' giusta.", "Pasquetta da Coma", JOptionPane.PLAIN_MESSAGE);
+    }//GEN-LAST:event_abautMenuActionPerformed
 
     /**
      * @param args the command line arguments
@@ -277,6 +292,7 @@ public class UserInterface extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem abautMenu;
     private javax.swing.JTextArea borselloTextArea;
     private javax.swing.JLabel borselloTitleLabel;
     private javax.swing.JLabel currentRoomLabel;
