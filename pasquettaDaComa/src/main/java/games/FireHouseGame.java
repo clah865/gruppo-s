@@ -84,24 +84,65 @@ public class FireHouseGame extends GameDescription {
         Room bossRoom = new Room (5, "Area ristorante", "E' l'area che il bar utilizza come ristorante. Che fame...");
         bossRoom.setLook("Sono presenti tanti tavoli apparecchiati e arriva una forte luce dalla vetrata. C'è un uomo con la mascherina seduto ad un tavolo!");
         //maps
-        kitchen.setEast(livingRoom);
-        livingRoom.setNorth(hall);
-        livingRoom.setWest(kitchen);
-        hall.setSouth(livingRoom);
-        hall.setWest(yourRoom);
-        hall.setNorth(bathroom);
-        bathroom.setSouth(hall);
-        yourRoom.setEast(hall);
-        getRooms().add(kitchen);
-        getRooms().add(livingRoom);
-        getRooms().add(hall);
-        getRooms().add(bathroom);
-        getRooms().add(yourRoom);
+        forest.setNorth(garden);
+        garden.setNorth(mainRoom);
+        mainRoom.setSouth(garden);
+        mainRoom.setEast(warehouse);
+        mainRoom.setWest(bossRoom);
+        warehouse.setWest(mainRoom);
+        warehouse.setSouth(office);
+        office.setNorth(warehouse);
+        bossRoom.setEast(mainRoom);
+        getRooms().add(forest);
+        getRooms().add(mainRoom);
+        getRooms().add(warehouse);
+        getRooms().add(office);
+        getRooms().add(bossRoom);
         //obejcts
-        AdvObject battery = new AdvObject(1, "batteria", "Un pacco di batterie, chissà se sono cariche.");
-        battery.setAlias(new String[]{"batterie", "pile", "pila"});
-        bathroom.getObjects().add(battery);
-        AdvObjectContainer wardrobe = new AdvObjectContainer(2, "armadio", "Un semplice armadio.");
+        AdvObject rides = new AdvObject(1, "giostrine", "Delle semplici giostrine per bambini.");
+        rides.setAlias(new String[]{"giostre", "giostrine", "giostra", "giostrina"});
+        garden.getObjects().add(rides);
+        AdvObject table = new AdvObject(1, "tavolini", "Tavolini apparecchiati sulla veranda.");
+        table.setAlias(new String[]{"tavolo", "tavoli", "tavolino", "tavolini", "veranda"});
+        garden.getObjects().add(table);
+        AdvObject telephone = new AdvObject(1, "telefono", "SCRIVERE MESSAGGIO DEL COMA ECC... MA MO NON MI INGOZZA XD");
+        telephone.setAlias(new String[]{"telefono", "cellulare", "telefonino", "smartphone"});
+        garden.getObjects().add(telephone);
+        
+        AdvObject fridge = new AdvObject(2, "frigo", "Il frigo delle birre. Peccato che è vuoto.");
+        fridge.setAlias(new String[]{"frigo", "frigorifero"});
+        mainRoom.getObjects().add(fridge);
+        AdvObject distributor = new AdvObject(2, "macchinetta", "");
+        distributor.setAlias(new String[]{"macchinetta", "distributore"});
+        mainRoom.getObjects().add(fridge);
+        
+        AdvObject wTable = new AdvObject(3, "tavolini", "Tavolini e sedie di scorta.");
+        wTable.setAlias(new String[]{"tavolo", "tavoli", "tavolino", "tavolini", "sedia", "sedie"});
+        warehouse.getObjects().add(wTable);
+        AdvObjectContainer safe = new AdvObjectContainer(3, "cassaforte", "Una strana e misteriosa cassaforte");
+        safe.setAlias(new String[]{"cassaforte", "cassa", "forziere"});
+        safe.setOpenable(true);
+        safe.setPickupable(false);
+        safe.setOpen(false);
+        warehouse.getObjects().add(safe);
+        
+        AdvObject armchair = new AdvObject(4, "poltrona", "Poltrone in pelle. Molto comode!");
+        armchair.setAlias(new String[]{"poltrona", "poltrone"});
+        office.getObjects().add(armchair);
+        AdvObject desk = new AdvObject(4, "scrivania", "Una bella scrivania. Sarà di una persona importante...");
+        desk.setAlias(new String[]{"poltrona", "poltrone"});
+        office.getObjects().add(desk);
+        AdvObject lamp = new AdvObject(4, "lampada", "Una lampada al centro della scrivania. L'unica fonte di luce in questa stanza.");
+        lamp.setAlias(new String[]{"lampada", "lampadina"});
+        office.getObjects().add(lamp);
+        //Inserire la bacheca
+        
+        AdvObject bTable = new AdvObject(5, "tavolini", "Tavoli apparecchiati. E' quasi pronto per mangiare.");
+        bTable.setAlias(new String[]{"tavolo", "tavoli", "tavolino", "tavolini"});
+        bossRoom.getObjects().add(bTable);
+        //Inserire boss
+        
+        /*AdvObjectContainer wardrobe = new AdvObjectContainer(2, "armadio", "Un semplice armadio.");
         wardrobe.setAlias(new String[]{"guardaroba", "vestiario"});
         wardrobe.setOpenable(true);
         wardrobe.setPickupable(false);
@@ -111,9 +152,10 @@ public class FireHouseGame extends GameDescription {
         toy.setAlias(new String[]{"gioco", "robot"});
         toy.setPushable(true);
         toy.setPush(false);
-        wardrobe.add(toy);
+        wardrobe.add(toy);*/
+        
         //set starting room
-        setCurrentRoom(hall);
+        setCurrentRoom(forest);
     }
 
     @Override

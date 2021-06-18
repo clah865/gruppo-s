@@ -75,7 +75,7 @@ public class UserInterface extends javax.swing.JFrame {
         menuBar = new javax.swing.JMenuBar();
         helpMenu = new javax.swing.JMenu();
         helpMenuCommandsList = new javax.swing.JMenuItem();
-        abautMenu = new javax.swing.JMenuItem();
+        aboutMenu = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(0, 0, 0));
@@ -187,13 +187,13 @@ public class UserInterface extends javax.swing.JFrame {
         });
         helpMenu.add(helpMenuCommandsList);
 
-        abautMenu.setText("Abaut");
-        abautMenu.addActionListener(new java.awt.event.ActionListener() {
+        aboutMenu.setText("About");
+        aboutMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                abautMenuActionPerformed(evt);
+                aboutMenuActionPerformed(evt);
             }
         });
-        helpMenu.add(abautMenu);
+        helpMenu.add(aboutMenu);
 
         menuBar.add(helpMenu);
 
@@ -242,18 +242,12 @@ public class UserInterface extends javax.swing.JFrame {
                 + "\n");
     }//GEN-LAST:event_helpMenuCommandsListActionPerformed
 
-    private void abautMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abautMenuActionPerformed
-        JOptionPane.showMessageDialog(this, "Pasquetta da Coma è un gioco d'avventura testuale, nel quale puoi\n"
-                + "inserire dei comandi testuali per esplorare l'ambiente che ti viene descritto e\n"
-                + "raccogliere ed utilizzare oggetti presenti nella mappa e\n"
-                + "risolvere enigmi presenti nel gioco.\n"
-                + "\n"
-                + "Il gioco racconta la storia tramite le descrizioni di alcuni oggetti, che saranno\n"
-                + "è necessario sfruttare tali descrizioni anche per poter procedere nel gioco, o per scoprire\n"
-                + "ulteriori dettagli.\n"
-                + "E qualunque cosa dovesse succedere:\n\n"
-                + "Non dimenticare di fare la scelta che ritieni piu' giusta.", "Pasquetta da Coma", JOptionPane.PLAIN_MESSAGE);
-    }//GEN-LAST:event_abautMenuActionPerformed
+    private void aboutMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutMenuActionPerformed
+        JOptionPane.showMessageDialog(this, "Pasquetta da Coma è un gioco d'avventura testuale, \nnel quale puoi inserire dei comandi da tastiera "
+                + "per esplorare la mappa \ne risolvere i vari enigmi presenti all'interno del gioco. \nRicordati di raccogliere gli oggetti "
+                + "per proseguire con l'avventura.\n\nSfruttare le descrizioni degli oggetti sarà fondamentale \nper proseguire la storia e"
+                + "ricoradti sempre\n\n Fai sempre la scelta giusta!!", "Pasquetta da Coma", JOptionPane.PLAIN_MESSAGE);
+    }//GEN-LAST:event_aboutMenuActionPerformed
 
     /**
      * @param args the command line arguments
@@ -292,7 +286,7 @@ public class UserInterface extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenuItem abautMenu;
+    private javax.swing.JMenuItem aboutMenu;
     private javax.swing.JTextArea borselloTextArea;
     private javax.swing.JLabel borselloTitleLabel;
     private javax.swing.JLabel currentRoomLabel;
