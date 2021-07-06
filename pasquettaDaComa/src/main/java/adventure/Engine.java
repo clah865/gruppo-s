@@ -5,7 +5,7 @@
  */
 package adventure;
 
-import games.FireHouseGame;
+import games.PasquettaDaComa;
 import parser.Parser;
 import parser.ParserOutput;
 import type.CommandType;
@@ -68,7 +68,7 @@ public class Engine {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Engine engine = new Engine(new FireHouseGame());
+        Engine engine = new Engine(new PasquettaDaComa());
         engine.execute();
     }
 

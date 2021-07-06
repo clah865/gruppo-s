@@ -9,11 +9,43 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
+//import da engine
+import games.PasquettaDaComa;
+import parser.Parser;
+import parser.ParserOutput;
+import type.CommandType;
+import java.io.File;
+import java.io.IOException;
+import java.util.Scanner;
+import java.util.Set;
+import adventure.*;
+
 /**
  *
  * @author Clah865
  */
 public class UserInterface extends javax.swing.JFrame {
+    
+    private final GameDescription game;
+    
+    private Parser parser;
+
+        public Engine(GameDescription game) {
+            
+        }
+
+        public void execute() {
+            gameTextArea.setText("================================");
+            gameTextArea.append("\n* Adventure v. 0.2 - 2020-2021 *");
+            gameTextArea.append("\n================================\n");
+            currentRoomLabel.setText(game.getCurrentRoom().getName());
+            gameTextArea.append("");
+            gameTextArea.append(game.getCurrentRoom().getDescription());
+            gameTextArea.append("");
+            
+        }
+
+    
 
     public class Timer extends Thread {
 
@@ -46,9 +78,31 @@ public class UserInterface extends javax.swing.JFrame {
      * Creates new form userInterface
      */
     public UserInterface() {
+        
+        this.game = game;
+            try {
+                this.game.init();
+            } catch (Exception ex) {
+                System.err.println(ex);
+            }
+            try {
+                Set<String> stopwords = Utils.loadFileListInSet(new File("./resources/stopwords"));
+                parser = new Parser(stopwords);
+            } catch (IOException ex) {
+                System.err.println(ex);
+            }
+
         initComponents();
+        init();
+        
+    }
+
+    private void init() {
+         
         (new Timer()).start();
 
+        Engine engine = new Engine(new PasquettaDaComa());
+        engine.execute();
     }
 
     /**
@@ -99,6 +153,11 @@ public class UserInterface extends javax.swing.JFrame {
         sendButton.setForeground(new java.awt.Color(102, 102, 102));
         sendButton.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
         sendButton.setLabel("Invia");
+        sendButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sendButtonActionPerformed(evt);
+            }
+        });
 
         currentRoomTitleLabel.setBackground(new java.awt.Color(255, 255, 255));
         currentRoomTitleLabel.setForeground(new java.awt.Color(255, 255, 255));
@@ -174,7 +233,7 @@ public class UserInterface extends javax.swing.JFrame {
                         .addComponent(borselloTitleLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(32, Short.MAX_VALUE))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
 
         helpMenu.setText("Help");
@@ -248,6 +307,22 @@ public class UserInterface extends javax.swing.JFrame {
                 + "per proseguire con l'avventura.\n\nSfruttare le descrizioni degli oggetti sarà fondamentale \nper proseguire la storia e"
                 + "ricoradti sempre\n\n Fai sempre la scelta giusta!!", "Pasquetta da Coma", JOptionPane.PLAIN_MESSAGE);
     }//GEN-LAST:event_aboutMenuActionPerformed
+
+    private void sendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendButtonActionPerformed
+
+        //Scanner scanner = new Scanner(System.in);
+            //while (scanner.hasNextLine()) {
+                String command = gameTextField.getText();
+                ParserOutput p = parser.parse(command, game.getCommands(), game.getCurrentRoom().getObjects(), game.getInventory());
+                if (p.getCommand() != null && p.getCommand().getType() == CommandType.END) {
+                    System.out.println("Addio!");
+                    //break;
+                } else {
+                    game.nextMove(p, System.out);
+                    System.out.println();
+                }
+            //}
+    }//GEN-LAST:event_sendButtonActionPerformed
 
     /**
      * @param args the command line arguments
