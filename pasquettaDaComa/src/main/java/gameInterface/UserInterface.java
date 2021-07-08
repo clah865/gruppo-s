@@ -25,27 +25,10 @@ import adventure.*;
  * @author Clah865
  */
 public class UserInterface extends javax.swing.JFrame {
-    
-    private final GameDescription game;
-    
+
+    private GameDescription game;
+
     private Parser parser;
-
-        public Engine(GameDescription game) {
-            
-        }
-
-        public void execute() {
-            gameTextArea.setText("================================");
-            gameTextArea.append("\n* Adventure v. 0.2 - 2020-2021 *");
-            gameTextArea.append("\n================================\n");
-            currentRoomLabel.setText(game.getCurrentRoom().getName());
-            gameTextArea.append("");
-            gameTextArea.append(game.getCurrentRoom().getDescription());
-            gameTextArea.append("");
-            
-        }
-
-    
 
     public class Timer extends Thread {
 
@@ -74,35 +57,47 @@ public class UserInterface extends javax.swing.JFrame {
         }
     }
 
+    public void execute() {
+
+    }
+
     /**
      * Creates new form userInterface
      */
     public UserInterface() {
-        
-        this.game = game;
-            try {
-                this.game.init();
-            } catch (Exception ex) {
-                System.err.println(ex);
-            }
-            try {
-                Set<String> stopwords = Utils.loadFileListInSet(new File("./resources/stopwords"));
-                parser = new Parser(stopwords);
-            } catch (IOException ex) {
-                System.err.println(ex);
-            }
 
         initComponents();
         init();
-        
+
     }
 
     private void init() {
-         
+
+        game = new PasquettaDaComa();
         (new Timer()).start();
 
-        Engine engine = new Engine(new PasquettaDaComa());
-        engine.execute();
+        try {
+            this.game.init();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+        }
+
+        //sicuramente è da cambiare la sua posizione
+        try {
+            Set<String> stopwords = Utils.loadFileListInSet(new File("./resources/stopwords"));
+            parser = new Parser(stopwords);
+        } catch (IOException ex) {
+            System.err.println(ex);
+        }
+
+        gameTextArea.setText("================================");
+        gameTextArea.append("\n* Adventure v. 0.2 - 2020-2021 *");
+        gameTextArea.append("\n================================\n");
+        currentRoomLabel.setText(game.getCurrentRoom().getName());
+        gameTextArea.append("");
+        gameTextArea.append(game.getCurrentRoom().getDescription());
+        gameTextArea.append("");
+
     }
 
     /**
@@ -311,17 +306,18 @@ public class UserInterface extends javax.swing.JFrame {
     private void sendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendButtonActionPerformed
 
         //Scanner scanner = new Scanner(System.in);
-            //while (scanner.hasNextLine()) {
-                String command = gameTextField.getText();
-                ParserOutput p = parser.parse(command, game.getCommands(), game.getCurrentRoom().getObjects(), game.getInventory());
-                if (p.getCommand() != null && p.getCommand().getType() == CommandType.END) {
-                    System.out.println("Addio!");
-                    //break;
-                } else {
-                    game.nextMove(p, System.out);
-                    System.out.println();
-                }
-            //}
+        //while (scanner.hasNextLine()) {
+        String command = gameTextField.getText();
+        ParserOutput p = parser.parse(command, game.getCommands(), game.getCurrentRoom().getObjects(), game.getInventory());
+        if (p.getCommand() != null && p.getCommand().getType() == CommandType.END) {
+            gameTextArea.setText("Addio!");
+            System.exit(0);
+        } else {
+            gameTextArea.setText(game.nextMove(p));
+            currentRoomLabel.setText(game.getCurrentRoom().getName());
+            gameTextField.setText("");
+        }
+        //}
     }//GEN-LAST:event_sendButtonActionPerformed
 
     /**
