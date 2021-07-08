@@ -88,7 +88,7 @@ public class PasquettaDaComa extends GameDescription {
         Room bossRoom = new Room(5, "Area ristorante", "E' l'area che il bar utilizza come ristorante. Che fame...");
         bossRoom.setLook("Sono presenti tanti tavoli apparecchiati e arriva una forte luce dalla vetrata. C'è un uomo con la mascherina seduto ad un tavolo!");
         //maps
-        forest.setNorth(garden);
+        forest.setNorth(garden); //da togliere perchè deve inseguire la palla e si ritova nel giardino
         garden.setNorth(mainRoom);
         mainRoom.setSouth(garden);
         mainRoom.setEast(warehouse);
@@ -171,35 +171,47 @@ public class PasquettaDaComa extends GameDescription {
             //move
             boolean noroom = false;
             boolean move = false;
-            if (p.getCommand().getType() == CommandType.NORD) {
-                if (getCurrentRoom().getNorth() != null) {
-                    setCurrentRoom(getCurrentRoom().getNorth());
-                    move = true;
+            boolean locked = false;
+            boolean novisible = false;
+            if (!getCurrentRoom().isLocked()) {
+                if (getCurrentRoom().isVisible()) {
+                    if (p.getCommand().getType() == CommandType.NORD) {
+                        if (getCurrentRoom().getNorth() != null) {
+                            setCurrentRoom(getCurrentRoom().getNorth());
+                            move = true;
+                        } else {
+                            noroom = true;
+                        }
+                    } else if (p.getCommand().getType() == CommandType.SOUTH) {
+                        if (getCurrentRoom().getSouth() != null) {
+                            setCurrentRoom(getCurrentRoom().getSouth());
+                            move = true;
+                        } else {
+                            noroom = true;
+                        }
+                    } else if (p.getCommand().getType() == CommandType.EAST) {
+                        if (getCurrentRoom().getEast() != null) {
+                            setCurrentRoom(getCurrentRoom().getEast());
+                            move = true;
+                        } else {
+                            noroom = true;
+                        }
+                    } else if (p.getCommand().getType() == CommandType.WEST) {
+                        if (getCurrentRoom().getWest() != null) {
+                            setCurrentRoom(getCurrentRoom().getWest());
+                            move = true;
+                        } else {
+                            noroom = true;
+                        }
+                    }
                 } else {
-                    noroom = true;
+                    novisible = true;
                 }
-            } else if (p.getCommand().getType() == CommandType.SOUTH) {
-                if (getCurrentRoom().getSouth() != null) {
-                    setCurrentRoom(getCurrentRoom().getSouth());
-                    move = true;
-                } else {
-                    noroom = true;
-                }
-            } else if (p.getCommand().getType() == CommandType.EAST) {
-                if (getCurrentRoom().getEast() != null) {
-                    setCurrentRoom(getCurrentRoom().getEast());
-                    move = true;
-                } else {
-                    noroom = true;
-                }
-            } else if (p.getCommand().getType() == CommandType.WEST) {
-                if (getCurrentRoom().getWest() != null) {
-                    setCurrentRoom(getCurrentRoom().getWest());
-                    move = true;
-                } else {
-                    noroom = true;
-                }
-            } else if (p.getCommand().getType() == CommandType.INVENTORY) {
+            } else {
+                locked = true;
+            }
+            
+            if (p.getCommand().getType() == CommandType.INVENTORY) {
                 out.append("Nel tuo inventario ci sono:");
                 for (AdvObject o : getInventory()) {
                     out.append(o.getName() + ": " + o.getDescription());
@@ -300,7 +312,11 @@ public class PasquettaDaComa extends GameDescription {
                 out.append("Da quella parte non si può andare c'è un muro! Non hai ancora acquisito i poteri per oltrepassare i muri...");
             } else if (move) {
                 out.append(getCurrentRoom().getDescription());
-            }
+            } else if (novisible) {
+                out.append("Sembra che non sia più possibile accedere alla zona");
+            } else if (locked) {
+            out.append("La porta è bloccata. Sulla porta compare un messaggio: 'bussare'.");
+        }
 
         }
         return out.toString();

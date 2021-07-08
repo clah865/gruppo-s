@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author pierpaolo
  */
-public class Inventory {
+public class Borsello {
 
     private List<AdvObject> list = new ArrayList<>();
 
