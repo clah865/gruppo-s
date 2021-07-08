@@ -17,12 +17,12 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="helpMenuCommandsListActionPerformed"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="abautMenu">
+            <MenuItem class="javax.swing.JMenuItem" name="aboutMenu">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Abaut"/>
+                <Property name="text" type="java.lang.String" value="About"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="abautMenuActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="aboutMenuActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>
@@ -190,6 +190,9 @@
             </Property>
             <Property name="label" type="java.lang.String" value="Invia"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="sendButtonActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="currentRoomTitleLabel">
           <Properties>

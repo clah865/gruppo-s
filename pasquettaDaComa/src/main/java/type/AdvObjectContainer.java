@@ -49,4 +49,8 @@ public class AdvObjectContainer extends AdvObject {
         list.remove(o);
     }
 
+    public Object getObjects() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }
