@@ -20,8 +20,12 @@ public class AdvObject {
     private String name;
 
     private String description;
-    
+
     private Set<String> alias;
+
+    private String password;
+
+    private boolean readable = false;
 
     private boolean openable = false;
 
@@ -95,6 +99,14 @@ public class AdvObject {
         this.pushable = pushable;
     }
 
+    public void setPass(String password) {
+        this.password = password;
+    }
+
+    public String getPass() {
+        return password;
+    }
+
     public boolean isOpen() {
         return open;
     }
@@ -118,9 +130,17 @@ public class AdvObject {
     public void setAlias(Set<String> alias) {
         this.alias = alias;
     }
-    
+
     public void setAlias(String[] alias) {
         this.alias = new HashSet<>(Arrays.asList(alias));
+    }
+
+    public boolean isReadable() {
+        return readable;
+    }
+
+    public void setReadable(boolean readable) {
+        this.readable = readable;
     }
 
     public int getId() {

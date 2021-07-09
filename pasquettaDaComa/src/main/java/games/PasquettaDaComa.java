@@ -64,6 +64,8 @@ public class PasquettaDaComa extends GameDescription {
         Command push = new Command(CommandType.PUSH, "premi");
         push.setAlias(new String[]{"spingi", "attiva"});
         getCommands().add(push);
+        Command read = new Command(CommandType.READ, "leggi");
+        getCommands().add(read); 
         //Rooms
         Room forest = new Room(0, "Mercadante", "E' pasquestta e stranamente non piove."
                 + "\nSei nella famosa foresta di Mercadante con il tuo gruppo di amici "
@@ -102,61 +104,66 @@ public class PasquettaDaComa extends GameDescription {
         getRooms().add(warehouse);
         getRooms().add(office);
         getRooms().add(bossRoom);
+        office.setLocked(true);
         //obejcts
-        AdvObject rides = new AdvObject(1, "giostrine", "Delle semplici giostrine per bambini.");
-        rides.setAlias(new String[]{"giostre", "giostrine", "giostra", "giostrina"});
-        garden.getObjects().add(rides);
-        AdvObject table = new AdvObject(1, "tavolini", "Tavolini apparecchiati sulla veranda.");
-        table.setAlias(new String[]{"tavolo", "tavoli", "tavolino", "tavolini", "veranda"});
-        garden.getObjects().add(table);
+        //stanza 1 
         AdvObject telephone = new AdvObject(1, "telefono", "SCRIVERE MESSAGGIO DEL COMA ECC... MA MO NON MI INGOZZA XD");
         telephone.setAlias(new String[]{"telefono", "cellulare", "telefonino", "smartphone"});
         garden.getObjects().add(telephone);
 
-        AdvObject fridge = new AdvObject(2, "frigo", "Il frigo delle birre. Peccato che è vuoto.");
-        fridge.setAlias(new String[]{"frigo", "frigorifero"});
-        mainRoom.getObjects().add(fridge);
-        AdvObject distributor = new AdvObject(2, "macchinetta", "");
+        //stanza 2
+        AdvObject distributor = new AdvObject(2, "macchinetta", "1) Caffè\n 2) Ginseng\n 3) Mocaccino\n 4) Caffè macchiato\n 5) Caffè al cioccolato\n");
         distributor.setAlias(new String[]{"macchinetta", "distributore"});
-        mainRoom.getObjects().add(fridge);
+        mainRoom.getObjects().add(distributor);
+        
+        AdvObject cafe = new AdvObject(2, "caffe", "Un classico caffè");
+        distributor.setAlias(new String[]{"caffè", "caffé", "caffe", "1"});
+        mainRoom.getObjects().add(cafe);
+        
+        AdvObject ginseng = new AdvObject(2, "ginseng", "Un classico ginseng");
+        distributor.setAlias(new String[]{"ginseng", "2"});
+        mainRoom.getObjects().add(ginseng);
+        
+        AdvObject mocaccino = new AdvObject(2, "mocaccino", "Un classico mocaccino");
+        distributor.setAlias(new String[]{"mocaccino", "3"});
+        mainRoom.getObjects().add(mocaccino);
+        
+        AdvObject mCafe = new AdvObject(2, "caffe macchiato", "Un classico caffè macchiato");
+        distributor.setAlias(new String[]{"caffè macchiato", "caffé macchiato", "caffe macchiato", "4"});
+        mainRoom.getObjects().add(mCafe);
+        
+        AdvObject cCafe = new AdvObject(2, "caffe al cioccolato", "Un classico caffè al cioccolato");
+        distributor.setAlias(new String[]{"caffè al cioccolato", "caffé al cioccolato", "caffe al cioccolato", "5"});
+        mainRoom.getObjects().add(cCafe);
 
-        AdvObject wTable = new AdvObject(3, "tavolini", "Tavolini e sedie di scorta.");
-        wTable.setAlias(new String[]{"tavolo", "tavoli", "tavolino", "tavolini", "sedia", "sedie"});
-        warehouse.getObjects().add(wTable);
+        //stanza 3
         AdvObjectContainer safe = new AdvObjectContainer(3, "cassaforte", "Una strana e misteriosa cassaforte");
         safe.setAlias(new String[]{"cassaforte", "cassa", "forziere"});
-        safe.setOpenable(true);
+        safe.setPass("12345");
         safe.setPickupable(false);
         safe.setOpen(false);
         warehouse.getObjects().add(safe);
-
-        AdvObject armchair = new AdvObject(4, "poltrona", "Poltrone in pelle. Molto comode!");
-        armchair.setAlias(new String[]{"poltrona", "poltrone"});
-        office.getObjects().add(armchair);
-        AdvObject desk = new AdvObject(4, "scrivania", "Una bella scrivania. Sarà di una persona importante...");
-        desk.setAlias(new String[]{"poltrona", "poltrone"});
-        office.getObjects().add(desk);
-        AdvObject lamp = new AdvObject(4, "lampada", "Una lampada al centro della scrivania. L'unica fonte di luce in questa stanza.");
-        lamp.setAlias(new String[]{"lampada", "lampadina"});
-        office.getObjects().add(lamp);
-        //Inserire la bacheca
-
-        AdvObject bTable = new AdvObject(5, "tavolini", "Tavoli apparecchiati. E' quasi pronto per mangiare.");
-        bTable.setAlias(new String[]{"tavolo", "tavoli", "tavolino", "tavolini"});
-        bossRoom.getObjects().add(bTable);
+        
+        AdvObject door = new AdvObject(3, "porta", "Una voce simile a quella di Carlo Conti chiede:\nDove si trova Foggia?"
+                + "\nA) Puglia\nB)Iran\nC) Sardegna\n D) Turkmenistan");
+        distributor.setAlias(new String[]{"porta", "portone"});
+        door.setPass("A");
+        warehouse.getObjects().add(door);
+        
+        //stanza 4
+        AdvObject note = new AdvObject (4,"nota", "La password e' --> 12345");
+        note.setAlias(new String[] {"foglio", "foglietto", "memo", "promemoria", "appunto"});
+        office.getObjects().add(note);
+        
+        /*AdvObjectContainer board = new AdvObjectContainer(4, "bacheca", "Una bacheca che contiene un foglietto");
+        safe.setOpenable(true);
+        safe.setPickupable(false);
+        safe.setOpen(false);
+        office.getObjects().add(board);*/
+       
         //Inserire boss
 
-        /*AdvObjectContainer wardrobe = new AdvObjectContainer(2, "armadio", "Un semplice armadio.");
-        wardrobe.setAlias(new String[]{"guardaroba", "vestiario"});
-        wardrobe.setOpenable(true);
-        wardrobe.setPickupable(false);
-        wardrobe.setOpen(false);
-        yourRoom.getObjects().add(wardrobe);
-        AdvObject toy = new AdvObject(3, "giocattolo", "Il gioco che ti ha regalato zia Lina.");
-        toy.setAlias(new String[]{"gioco", "robot"});
-        toy.setPushable(true);
-        toy.setPush(false);
-        wardrobe.add(toy);*/
+        
         //set starting room
         setCurrentRoom(forest);
     }
