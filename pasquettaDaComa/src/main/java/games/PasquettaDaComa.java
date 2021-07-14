@@ -65,7 +65,7 @@ public class PasquettaDaComa extends GameDescription {
         push.setAlias(new String[]{"spingi", "attiva"});
         getCommands().add(push);
         Command read = new Command(CommandType.READ, "leggi");
-        getCommands().add(read); 
+        getCommands().add(read);
         //Rooms
         Room forest = new Room(0, "Mercadante", "E' pasquestta e stranamente non piove."
                 + "\nSei nella famosa foresta di Mercadante con il tuo gruppo di amici "
@@ -112,58 +112,56 @@ public class PasquettaDaComa extends GameDescription {
         garden.getObjects().add(telephone);
 
         //stanza 2
-        AdvObject distributor = new AdvObject(2, "macchinetta", "1) Caffè\n 2) Ginseng\n 3) Mocaccino\n 4) Caffè macchiato\n 5) Caffè al cioccolato\n");
+        AdvObjectContainer distributor = new AdvObjectContainer(2, "macchinetta", "1) Caffè\n 2) Ginseng\n 3) Mocaccino\n 4) Caffè macchiato\n 5) Caffè al cioccolato\n");
         distributor.setAlias(new String[]{"macchinetta", "distributore"});
+        distributor.setPass("110721");
         mainRoom.getObjects().add(distributor);
-        
+
         AdvObject cafe = new AdvObject(2, "caffe", "Un classico caffè");
-        distributor.setAlias(new String[]{"caffè", "caffé", "caffe", "1"});
-        mainRoom.getObjects().add(cafe);
-        
+        cafe.setAlias(new String[]{"caffè", "caffé", "1"});
+        distributor.add(cafe);
+
         AdvObject ginseng = new AdvObject(2, "ginseng", "Un classico ginseng");
-        distributor.setAlias(new String[]{"ginseng", "2"});
-        mainRoom.getObjects().add(ginseng);
-        
+        ginseng.setAlias(new String[]{"2"});
+        distributor.add(ginseng);
+
         AdvObject mocaccino = new AdvObject(2, "mocaccino", "Un classico mocaccino");
-        distributor.setAlias(new String[]{"mocaccino", "3"});
-        mainRoom.getObjects().add(mocaccino);
-        
+        mocaccino.setAlias(new String[]{"mocaccino", "3"});
+        distributor.add(mocaccino);
+
         AdvObject mCafe = new AdvObject(2, "caffe macchiato", "Un classico caffè macchiato");
-        distributor.setAlias(new String[]{"caffè macchiato", "caffé macchiato", "caffe macchiato", "4"});
-        mainRoom.getObjects().add(mCafe);
-        
+        mCafe.setAlias(new String[]{"caffè macchiato", "caffé macchiato", "caffe macchiato", "4"});
+        distributor.add(mCafe);
+
         AdvObject cCafe = new AdvObject(2, "caffe al cioccolato", "Un classico caffè al cioccolato");
-        distributor.setAlias(new String[]{"caffè al cioccolato", "caffé al cioccolato", "caffe al cioccolato", "5"});
-        mainRoom.getObjects().add(cCafe);
+        cCafe.setAlias(new String[]{"caffè al cioccolato", "caffé al cioccolato", "caffe al cioccolato", "5"});
+        distributor.add(cCafe);
 
         //stanza 3
         AdvObjectContainer safe = new AdvObjectContainer(3, "cassaforte", "Una strana e misteriosa cassaforte");
         safe.setAlias(new String[]{"cassaforte", "cassa", "forziere"});
+        safe.setOpenable(true);
         safe.setPass("12345");
         safe.setPickupable(false);
         safe.setOpen(false);
         warehouse.getObjects().add(safe);
-        
+
+        AdvObject sKey = new AdvObject(3, "Codice segreto", "Il codice segreto per un caffè gratis è: 110721");
+        sKey.setAlias(new String[]{"chiave", "codice", "chiave segreta"});
+        safe.add(sKey);
+
         AdvObject door = new AdvObject(3, "porta", "Una voce simile a quella di Carlo Conti chiede:\nDove si trova Foggia?"
                 + "\nA) Puglia\nB)Iran\nC) Sardegna\n D) Turkmenistan");
         distributor.setAlias(new String[]{"porta", "portone"});
         door.setPass("A");
         warehouse.getObjects().add(door);
-        
-        //stanza 4
-        AdvObject note = new AdvObject (4,"nota", "La password e' --> 12345");
-        note.setAlias(new String[] {"foglio", "foglietto", "memo", "promemoria", "appunto"});
-        office.getObjects().add(note);
-        
-        /*AdvObjectContainer board = new AdvObjectContainer(4, "bacheca", "Una bacheca che contiene un foglietto");
-        safe.setOpenable(true);
-        safe.setPickupable(false);
-        safe.setOpen(false);
-        office.getObjects().add(board);*/
-       
-        //Inserire boss
 
-        
+        //stanza 4
+        AdvObject note = new AdvObject(4, "nota", "La password e' --> 12345");
+        note.setAlias(new String[]{"foglio", "foglietto", "memo", "promemoria", "appunto"});
+        office.getObjects().add(note);
+
+        //Inserire boss
         //set starting room
         setCurrentRoom(forest);
     }
@@ -172,161 +170,139 @@ public class PasquettaDaComa extends GameDescription {
     public String nextMove(ParserOutput p) {
         StringBuilder out = new StringBuilder();
         if (p.getCommand() == null) {
-
             out.append("Non ho capito cosa devo fare! Prova con un altro comando.");
         } else {
             //move
-            boolean noroom = false;
-            boolean move = false;
-            boolean locked = false;
-            boolean novisible = false;
-            if (!getCurrentRoom().isLocked()) {
-                if (getCurrentRoom().isVisible()) {
-                    if (p.getCommand().getType() == CommandType.NORD) {
-                        if (getCurrentRoom().getNorth() != null) {
-                            setCurrentRoom(getCurrentRoom().getNorth());
-                            move = true;
-                        } else {
-                            noroom = true;
+            Room nextRoom;
+
+            if (null != p.getCommand().getType()) {
+                switch (p.getCommand().getType()) {
+                    case NORD:
+                        nextRoom = getCurrentRoom().getNorth();
+                        out = checkMove(nextRoom);
+                        break;
+                    case SOUTH:
+                        nextRoom = getCurrentRoom().getSouth();
+                        out = checkMove(nextRoom);
+                        break;
+                    case EAST:
+                        nextRoom = getCurrentRoom().getEast();
+                        out = checkMove(nextRoom);
+                        break;
+                    case WEST:
+                        nextRoom = getCurrentRoom().getWest();
+                        out = checkMove(nextRoom);
+                        break;
+                    case INVENTORY:
+                        out.append("Nel tuo inventario ci sono:");
+                        for (AdvObject o : getInventory()) {
+                            out.append(o.getName() + ": " + o.getDescription());
                         }
-                    } else if (p.getCommand().getType() == CommandType.SOUTH) {
-                        if (getCurrentRoom().getSouth() != null) {
-                            setCurrentRoom(getCurrentRoom().getSouth());
-                            move = true;
+                        break;
+                    case LOOK_AT:
+                        if (getCurrentRoom().getLook() != null) {
+                            out.append(getCurrentRoom().getLook());
                         } else {
-                            noroom = true;
+                            out.append("Non c'è niente di interessante qui.");
                         }
-                    } else if (p.getCommand().getType() == CommandType.EAST) {
-                        if (getCurrentRoom().getEast() != null) {
-                            setCurrentRoom(getCurrentRoom().getEast());
-                            move = true;
-                        } else {
-                            noroom = true;
-                        }
-                    } else if (p.getCommand().getType() == CommandType.WEST) {
-                        if (getCurrentRoom().getWest() != null) {
-                            setCurrentRoom(getCurrentRoom().getWest());
-                            move = true;
-                        } else {
-                            noroom = true;
-                        }
-                    }
-                } else {
-                    novisible = true;
-                }
-            } else {
-                locked = true;
-            }
-            
-            if (p.getCommand().getType() == CommandType.INVENTORY) {
-                out.append("Nel tuo inventario ci sono:");
-                for (AdvObject o : getInventory()) {
-                    out.append(o.getName() + ": " + o.getDescription());
-                }
-            } else if (p.getCommand().getType() == CommandType.LOOK_AT) {
-                if (getCurrentRoom().getLook() != null) {
-                    out.append(getCurrentRoom().getLook());
-                } else {
-                    out.append("Non c'è niente di interessante qui.");
-                }
-            } else if (p.getCommand().getType() == CommandType.PICK_UP) {
-                if (p.getObject() != null) {
-                    if (p.getObject().isPickupable()) {
-                        getInventory().add(p.getObject());
-                        getCurrentRoom().getObjects().remove(p.getObject());
-                        out.append("Hai raccolto: " + p.getObject().getDescription());
-                    } else {
-                        out.append("Non puoi raccogliere questo oggetto.");
-                    }
-                } else {
-                    out.append("Non c'è niente da raccogliere qui.");
-                }
-            } else if (p.getCommand().getType() == CommandType.OPEN) {
-                /*ATTENZIONE: quando un oggetto contenitore viene aperto, tutti gli oggetti contenuti
-                * vengongo inseriti nella stanza o nell'inventario a seconda di dove si trova l'oggetto contenitore.
-                * Questa soluzione NON va bene poiché quando un oggetto contenitore viene richiuso è complicato
-                * non rendere più disponibili gli oggetti contenuti rimuovendoli dalla stanza o dall'invetario.
-                * Trovare altra soluzione.
-                 */
-                if (p.getObject() == null && p.getInvObject() == null) {
-                    out.append("Non c'è niente da aprire qui.");
-                } else {
-                    if (p.getObject() != null) {
-                        if (p.getObject().isOpenable() && p.getObject().isOpen() == false) {
-                            if (p.getObject() instanceof AdvObjectContainer) {
-                                out.append("Hai aperto: " + p.getObject().getName());
-                                AdvObjectContainer c = (AdvObjectContainer) p.getObject();
-                                if (!c.getList().isEmpty()) {
-                                    out.append(c.getName() + " contiene:");
-                                    Iterator<AdvObject> it = c.getList().iterator();
-                                    while (it.hasNext()) {
-                                        AdvObject next = it.next();
-                                        getCurrentRoom().getObjects().add(next);
-                                        out.append(" " + next.getName());
-                                        it.remove();
-                                    }
-                                    out.append("");
-                                }
+                        break;
+                    case PICK_UP:
+                        if (p.getObject() != null) {
+                            if (p.getObject().isPickupable()) {
+                                //if ()
+                                getInventory().add(p.getObject());
+                                getCurrentRoom().getObjects().remove(p.getObject());
+                                out.append("Hai raccolto: " + p.getObject().getDescription());
                             } else {
-                                out.append("Hai aperto: " + p.getObject().getName());
-                                p.getObject().setOpen(true);
+                                out.append("Non puoi raccogliere questo oggetto.");
                             }
                         } else {
-                            out.append("Non puoi aprire questo oggetto.");
+                            out.append("Non c'è niente da raccogliere qui.");
                         }
-                    }
-                    if (p.getInvObject() != null) {
-                        if (p.getInvObject().isOpenable() && p.getInvObject().isOpen() == false) {
-                            if (p.getInvObject() instanceof AdvObjectContainer) {
-                                AdvObjectContainer c = (AdvObjectContainer) p.getInvObject();
-                                if (!c.getList().isEmpty()) {
-                                    out.append(c.getName() + " contiene:");
-                                    Iterator<AdvObject> it = c.getList().iterator();
-                                    while (it.hasNext()) {
-                                        AdvObject next = it.next();
-                                        getInventory().add(next);
-                                        out.append(" " + next.getName());
-                                        it.remove();
-                                    }
-                                    out.append("");
-                                }
-                            } else {
-                                p.getInvObject().setOpen(true);
-                            }
-                            out.append("Hai aperto nel tuo inventario: " + p.getInvObject().getName());
+                        break;
+                    case OPEN:
+                        if (p.getObject() == null && p.getInvObject() == null) {
+                            out.append("Non c'è niente da aprire qui.");
                         } else {
-                            out.append("Non puoi aprire questo oggetto.");
+                            if (p.getObject() != null) {
+                                if (p.getObject().isOpenable() && p.getObject().isOpen() == false) {
+                                    if (p.getObject().getPass() == null) {
+                                        if (p.getObject() instanceof AdvObjectContainer) {
+                                            out.append("Hai aperto: " + p.getObject().getName());
+                                            AdvObjectContainer c = (AdvObjectContainer) p.getObject();
+                                            p.getObject().setOpen(true);
+                                            if (!c.getList().isEmpty()) {
+                                                out.append(". Contiene:");
+                                                Iterator<AdvObject> it = c.getList().iterator();
+                                                while (it.hasNext()) {
+                                                    AdvObject next = it.next();
+                                                    out.append(" " + next.getName());
+                                                }
+                                                out.append("");
+                                            }
+                                        } else {
+                                            AdvObjectContainer c = (AdvObjectContainer) p.getObject();
+                                            out.append("Hai già aperto: " + p.getObject().getName());
+                                            out.append(". Contiene:");
+                                            Iterator<AdvObject> it = c.getList().iterator();
+                                            while (it.hasNext()) {
+                                                AdvObject next = it.next();
+                                                out.append(" " + next.getName());
+                                            }
+                                            out.append("");
+                                        }
+                                    } else {
+                                        out.append("Non puoi aprire questo oggetto. Hai bisogno di una password!");
+                                    }
+
+                                } else {
+                                    out.append("Non puoi aprire questo oggetto.");
+                                }
+                            }
+
                         }
-                    }
-                }
-            } else if (p.getCommand().getType() == CommandType.PUSH) {
-                //ricerca oggetti pushabili
-                if (p.getObject() != null && p.getObject().isPushable()) {
-                    out.append("Hai premuto: " + p.getObject().getName());
-                    if (p.getObject().getId() == 3) {
-                        //end(out);
-                    }
-                } else if (p.getInvObject() != null && p.getInvObject().isPushable()) {
-                    out.append("Hai premuto: " + p.getInvObject().getName());
-                    if (p.getInvObject().getId() == 3) {
-                        //end(out);
-                    }
-                } else {
-                    out.append("Non ci sono oggetti che puoi premere qui.");
+                        break;
+                    case PUSH:
+                        //ricerca oggetti pushabili
+                        if (p.getObject() != null && p.getObject().isPushable()) {
+                            out.append("Hai premuto: " + p.getObject().getName());
+                            if (p.getObject().getId() == 3) {
+                                //end(out);
+                            }
+                        } else if (p.getInvObject() != null && p.getInvObject().isPushable()) {
+                            out.append("Hai premuto: " + p.getInvObject().getName());
+                            if (p.getInvObject().getId() == 3) {
+                                //end(out);
+                            }
+                        } else {
+                            out.append("Non ci sono oggetti che puoi premere qui.");
+                        }
+                        break;
+
                 }
             }
-            if (noroom) {
-                out.append("Da quella parte non si può andare c'è un muro! Non hai ancora acquisito i poteri per oltrepassare i muri...");
-            } else if (move) {
-                out.append(getCurrentRoom().getDescription());
-            } else if (novisible) {
-                out.append("Sembra che non sia più possibile accedere alla zona");
-            } else if (locked) {
-            out.append("La porta è bloccata. Sulla porta compare un messaggio: 'bussare'.");
         }
 
-        }
         return out.toString();
+    }
+
+    private StringBuilder checkMove(Room nextRoom) {
+        StringBuilder out = new StringBuilder();
+        if (nextRoom != null) {
+            if (nextRoom.isVisible()) {
+                if (!nextRoom.isLocked()) {
+                    setCurrentRoom(nextRoom);
+                    out.append(getCurrentRoom().getDescription());
+                } else {
+                    out.append("La porta è bloccata. Sulla porta compare un messaggio: 'bussare'.");
+                }
+            } else {
+                out.append("Sembra che non sia più possibile accedere alla zona");
+            }
+        } else {
+            out.append("Da quella parte non si può andare c'è un muro! Non hai ancora acquisito i poteri per oltrepassare i muri...");
+        }
+        return out;
     }
 
     private void end(PrintStream out) {
