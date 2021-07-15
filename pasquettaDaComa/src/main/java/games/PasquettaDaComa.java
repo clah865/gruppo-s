@@ -146,16 +146,17 @@ public class PasquettaDaComa extends GameDescription {
         safe.setOpen(false);
         warehouse.getObjects().add(safe);
 
+        AdvObject door = new AdvObject(3, "porta", "Una voce simile a quella di Carlo Conti chiede:\nDove si trova Foggia?"
+                + "\nA) Puglia\nB)Iran\nC) Sardegna\n D) Turkmenistan");
+        door.setAlias(new String[]{"portone"});
+        door.setPass("A");
+        warehouse.getObjects().add(door);
+
         AdvObject sKey = new AdvObject(3, "codice segreto", "Il codice segreto per un caffè gratis è: 110721");
         sKey.setAlias(new String[]{"chiave", "codice", "chiave segreta"});
         safe.add(sKey);
 
-        AdvObject door = new AdvObject(3, "porta", "Una voce simile a quella di Carlo Conti chiede:\nDove si trova Foggia?"
-                + "\nA) Puglia\nB)Iran\nC) Sardegna\n D) Turkmenistan");
-        distributor.setAlias(new String[]{"porta", "portone"});
-        door.setPass("A");
-        warehouse.getObjects().add(door);
-
+        /* */
         //stanza 4
         AdvObject note = new AdvObject(4, "nota", "La password e' --> 12345");
         note.setAlias(new String[]{"foglio", "foglietto", "memo", "promemoria", "appunto"});
@@ -211,23 +212,19 @@ public class PasquettaDaComa extends GameDescription {
                             Iterator<AdvObject> it = getCurrentRoom().getObjects().iterator();  //iteratore per scansionare gli oggetti nella stanza
                             while (it.hasNext()) {
                                 AdvObject next = it.next();  //oggetto singolo all'interno della stanza
-                                if (next.isOpenable()) {
-                                    AdvObjectContainer container = (AdvObjectContainer) next; 
+                                if (next.isOpenable() && next instanceof AdvObjectContainer) {
+
+                                    AdvObjectContainer container = (AdvObjectContainer) next;
+
                                     Iterator<AdvObject> nextIt = container.getList().iterator();  //iteratore per scansionere gli oggetti nel contenitore
                                     while (nextIt.hasNext()) {
                                         AdvObject nextContainer;
                                         nextContainer = nextIt.next();  //oggetto singolo all'interno del contenitore
                                         if (p.getObject().equals(nextContainer)) {
-                                            if (p.getObject().isPickupable()) {
-                                                getCurrentRoom().getObjects().add(p.getObject());
-                                                container.getList().remove(p.getObject());
-                                            } else {
-                                                out.append("Non puoi raccogliere questo oggetto.");
-                                            }
+                                            nextIt.remove();
                                         }
                                     }
                                 }
-                                out.append(" " + next.getName());
                                 if (p.getObject().equals(next)) {
                                     if (p.getObject().isPickupable()) {
                                         getInventory().add(p.getObject());
@@ -261,27 +258,28 @@ public class PasquettaDaComa extends GameDescription {
                                                 while (it.hasNext()) {
                                                     AdvObject next = it.next();
                                                     out.append(" " + next.getName());
+                                                    getCurrentRoom().getObjects().add(next);
                                                 }
                                                 out.append("");
                                             }
-                                        } else {
-                                            AdvObjectContainer c = (AdvObjectContainer) p.getObject();
-                                            out.append("Hai già aperto: " + p.getObject().getName());
-                                            out.append(". Contiene:");
-                                            Iterator<AdvObject> it = c.getList().iterator();
-                                            while (it.hasNext()) {
-                                                AdvObject next = it.next();
-                                                out.append(" " + next.getName());
-                                            }
-                                            out.append("");
                                         }
                                     } else {
                                         out.append("Non puoi aprire questo oggetto. Hai bisogno di una password!");
                                     }
 
                                 } else {
-                                    out.append("Non puoi aprire questo oggetto.");
+                                    AdvObjectContainer c = (AdvObjectContainer) p.getObject();
+                                    out.append("Hai già aperto: " + p.getObject().getName());
+                                    out.append(". Contiene:");
+                                    Iterator<AdvObject> it = c.getList().iterator();
+                                    while (it.hasNext()) {
+                                        AdvObject next = it.next();
+                                        out.append(" " + next.getName());
+                                    }
+                                    out.append("");
                                 }
+                            } else {
+                                out.append("Non puoi aprire questo oggetto.");
                             }
 
                         }
