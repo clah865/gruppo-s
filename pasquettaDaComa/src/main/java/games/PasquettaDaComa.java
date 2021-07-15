@@ -141,12 +141,12 @@ public class PasquettaDaComa extends GameDescription {
         AdvObjectContainer safe = new AdvObjectContainer(3, "cassaforte", "Una strana e misteriosa cassaforte");
         safe.setAlias(new String[]{"cassaforte", "cassa", "forziere"});
         safe.setOpenable(true);
-        safe.setPass("12345");
+        //safe.setPass("12345");
         safe.setPickupable(false);
         safe.setOpen(false);
         warehouse.getObjects().add(safe);
 
-        AdvObject sKey = new AdvObject(3, "Codice segreto", "Il codice segreto per un caffè gratis è: 110721");
+        AdvObject sKey = new AdvObject(3, "codice segreto", "Il codice segreto per un caffè gratis è: 110721");
         sKey.setAlias(new String[]{"chiave", "codice", "chiave segreta"});
         safe.add(sKey);
 
@@ -208,14 +208,38 @@ public class PasquettaDaComa extends GameDescription {
                         break;
                     case PICK_UP:
                         if (p.getObject() != null) {
-                            if (p.getObject().isPickupable()) {
-                                //if ()
-                                getInventory().add(p.getObject());
-                                getCurrentRoom().getObjects().remove(p.getObject());
-                                out.append("Hai raccolto: " + p.getObject().getDescription());
-                            } else {
-                                out.append("Non puoi raccogliere questo oggetto.");
+                            Iterator<AdvObject> it = getCurrentRoom().getObjects().iterator();  //iteratore per scansionare gli oggetti nella stanza
+                            while (it.hasNext()) {
+                                AdvObject next = it.next();  //oggetto singolo all'interno della stanza
+                                if (next.isOpenable()) {
+                                    AdvObjectContainer container = (AdvObjectContainer) next; 
+                                    Iterator<AdvObject> nextIt = container.getList().iterator();  //iteratore per scansionere gli oggetti nel contenitore
+                                    while (nextIt.hasNext()) {
+                                        AdvObject nextContainer;
+                                        nextContainer = nextIt.next();  //oggetto singolo all'interno del contenitore
+                                        if (p.getObject().equals(nextContainer)) {
+                                            if (p.getObject().isPickupable()) {
+                                                getCurrentRoom().getObjects().add(p.getObject());
+                                                container.getList().remove(p.getObject());
+                                            } else {
+                                                out.append("Non puoi raccogliere questo oggetto.");
+                                            }
+                                        }
+                                    }
+                                }
+                                out.append(" " + next.getName());
+                                if (p.getObject().equals(next)) {
+                                    if (p.getObject().isPickupable()) {
+                                        getInventory().add(p.getObject());
+                                        getCurrentRoom().getObjects().remove(p.getObject());
+                                        out.append("Hai raccolto: " + p.getObject().getDescription());
+                                        break;
+                                    } else {
+                                        out.append("Non puoi raccogliere questo oggetto.");
+                                    }
+                                }
                             }
+
                         } else {
                             out.append("Non c'è niente da raccogliere qui.");
                         }
