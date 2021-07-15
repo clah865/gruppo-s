@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.Scanner;
 import java.util.Set;
 import adventure.*;
+import java.awt.event.KeyEvent;
 
 /**
  *
@@ -90,9 +91,9 @@ public class UserInterface extends javax.swing.JFrame {
             System.err.println(ex);
         }
 
-        gameTextArea.setText("================================");
-        gameTextArea.append("\n* Adventure v. 0.2 - 2020-2021 *");
-        gameTextArea.append("\n================================\n");
+        gameTextArea.setText("====================================================================");
+        gameTextArea.append("\n\t\t    | Pasquetta da Coma |");
+        gameTextArea.append("\n====================================================================\n");
         currentRoomLabel.setText(game.getCurrentRoom().getName());
         gameTextArea.append("");
         gameTextArea.append(game.getCurrentRoom().getDescription());
@@ -143,6 +144,11 @@ public class UserInterface extends javax.swing.JFrame {
 
         gameTextField.setBackground(new java.awt.Color(0, 0, 0));
         gameTextField.setForeground(new java.awt.Color(255, 255, 255));
+        gameTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                gameTextFieldKeyReleased(evt);
+            }
+        });
 
         sendButton.setBackground(new java.awt.Color(0, 0, 0));
         sendButton.setForeground(new java.awt.Color(102, 102, 102));
@@ -228,7 +234,7 @@ public class UserInterface extends javax.swing.JFrame {
                         .addComponent(borselloTitleLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(31, Short.MAX_VALUE))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
 
         helpMenu.setText("Help");
@@ -304,9 +310,16 @@ public class UserInterface extends javax.swing.JFrame {
     }//GEN-LAST:event_aboutMenuActionPerformed
 
     private void sendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendButtonActionPerformed
+        commandReceiver();
+    }//GEN-LAST:event_sendButtonActionPerformed
 
-        //Scanner scanner = new Scanner(System.in);
-        //while (scanner.hasNextLine()) {
+    private void gameTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_gameTextFieldKeyReleased
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            commandReceiver();
+        }
+    }//GEN-LAST:event_gameTextFieldKeyReleased
+
+    private void commandReceiver() {
         String command = gameTextField.getText();
         ParserOutput p = parser.parse(command, game.getCommands(), game.getCurrentRoom().getObjects(), game.getInventory());
         if (p.getCommand() != null && p.getCommand().getType() == CommandType.END) {
@@ -317,8 +330,7 @@ public class UserInterface extends javax.swing.JFrame {
             currentRoomLabel.setText(game.getCurrentRoom().getName());
             gameTextField.setText("");
         }
-        //}
-    }//GEN-LAST:event_sendButtonActionPerformed
+    }
 
     /**
      * @param args the command line arguments
