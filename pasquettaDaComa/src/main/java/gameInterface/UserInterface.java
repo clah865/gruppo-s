@@ -16,9 +16,9 @@ import parser.ParserOutput;
 import type.CommandType;
 import java.io.File;
 import java.io.IOException;
-import java.util.Scanner;
 import java.util.Set;
 import adventure.*;
+import type.AdvObject;
 import java.awt.event.KeyEvent;
 
 /**
@@ -56,10 +56,6 @@ public class UserInterface extends javax.swing.JFrame {
 
             }
         }
-    }
-
-    public void execute() {
-
     }
 
     /**
@@ -234,7 +230,7 @@ public class UserInterface extends javax.swing.JFrame {
                         .addComponent(borselloTitleLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
 
         helpMenu.setText("Help");
@@ -329,7 +325,15 @@ public class UserInterface extends javax.swing.JFrame {
             gameTextArea.setText(game.nextMove(p));
             currentRoomLabel.setText(game.getCurrentRoom().getName());
             gameTextField.setText("");
+            borselloUpdater();
         }
+    }
+
+    private void borselloUpdater() {
+        borselloTextArea.setText("");
+        game.getInventory().forEach(it -> {
+            borselloTextArea.append("- " + it.getName() + "\n");
+        });
     }
 
     /**

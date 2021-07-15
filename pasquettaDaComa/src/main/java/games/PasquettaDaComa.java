@@ -31,6 +31,8 @@ import java.util.Iterator;
  */
 public class PasquettaDaComa extends GameDescription {
 
+    private final String WAREHOUSE_NAME = "warehouse";
+
     @Override
     public void init() throws Exception {
         //Commands
@@ -66,15 +68,18 @@ public class PasquettaDaComa extends GameDescription {
         getCommands().add(push);
         Command read = new Command(CommandType.READ, "leggi");
         getCommands().add(read);
+        Command insertPassStrongbox = new Command(CommandType.INSERT_PASS_STRONGBOX, "inserisci paswword");
+        insertPassStrongbox.setAlias(new String[]{"inserire password"});
+        getCommands().add(insertPassStrongbox);
         //Rooms
-        Room forest = new Room(0, "Mercadante", "E' pasquestta e stranamente non piove."
+        Room forest = new Room(0, "Mercadante", "E' pasquetta e stranamente non piove."
                 + "\nSei nella famosa foresta di Mercadante con il tuo gruppo di amici e dopo qualche birra di troppo "
                 + "\niniziate a giocare con la palla."
                 + "\nSenza motivo afferri la palla e la calci troppo lontano...");
         forest.setLook("Non c'è niente da osservare!"
-                + "\nVai a prendere la palla prima che i tuoi amici inzino ad agitarsi");
+                + "\nVai a prendere la palla verso nord prima che i tuoi amici inzino ad agitarsi");
         Room garden = new Room(1, "Giardino", "Recuperando la palla non hai visto dove mettevi i piedi sei inciampato e hai battuto la testa"
-                + "\ne ti sei risvegliato all'estreno dell'unco bar presente nella foresta");
+                + "\ne ti sei risvegliato all'estreno dell'unico bar presente nella foresta. Osserverei in giro...");
         garden.setLook("Proprio accanto a te noti delle giostrine per bambini mentre vicino l'ingresso, a nord, "
                 + "\nc'è una veranda con dei tavoli apparecchiati. Ma... a terra c'è il tuo telefono!");
         Room mainRoom = new Room(2, "Stanza principale", "Entrando la porta alle tue spalle si chiude senza darti possibilità di uscita. "
@@ -92,7 +97,7 @@ public class PasquettaDaComa extends GameDescription {
         bossRoom.setLook("Sono presenti tanti tavoli apparecchiati e arriva una forte luce dalla vetrata. "
                 + "\nC'è un uomo con la mascherina seduto ad un tavolo!");
         //maps
-        forest.setNorth(garden); //da togliere perchè deve inseguire la palla e si ritova nel giardino
+        forest.setNorth(garden);
         garden.setNorth(mainRoom);
         mainRoom.setSouth(garden);
         mainRoom.setEast(warehouse);
@@ -109,7 +114,7 @@ public class PasquettaDaComa extends GameDescription {
         office.setLocked(true);
         //obejcts
         //stanza 1 
-        AdvObject telephone = new AdvObject(1, "telefono", "SCRIVERE MESSAGGIO DEL COMA ECC... MA MO NON MI INGOZZA XD");
+        AdvObject telephone = new AdvObject(1, "telefono", "Sei in coma, l'unico modo per svegliarti è entrare nel bar a nord e prendere dalla macchinetta un cappuccino alla genovese");
         telephone.setAlias(new String[]{"telefono", "cellulare", "telefonino", "smartphone"});
         garden.getObjects().add(telephone);
 
@@ -195,6 +200,8 @@ public class PasquettaDaComa extends GameDescription {
                     case WEST:
                         nextRoom = getCurrentRoom().getWest();
                         out = checkMove(nextRoom);
+                        break;
+                    case INSERT_PASS_STRONGBOX:
                         break;
                     case INVENTORY:
                         out.append("Nel tuo inventario ci sono:");
@@ -320,8 +327,15 @@ public class PasquettaDaComa extends GameDescription {
         if (nextRoom != null) {
             if (nextRoom.isVisible()) {
                 if (!nextRoom.isLocked()) {
-                    setCurrentRoom(nextRoom);
-                    out.append(getCurrentRoom().getDescription());
+                    if (getCurrentRoom().getName() == "Giardino") {
+                        getCurrentRoom().setVisible(false);
+                        setCurrentRoom(nextRoom);
+                        out.append(getCurrentRoom().getDescription());
+                    } else {
+                        setCurrentRoom(nextRoom);
+                        out.append(getCurrentRoom().getDescription());
+                    }
+
                 } else {
                     out.append("La porta è bloccata. Sulla porta compare un messaggio: 'bussare'.");
                 }
@@ -332,6 +346,31 @@ public class PasquettaDaComa extends GameDescription {
             out.append("Da quella parte non si può andare! Gli sviluppatori non vogliono...");
         }
         return out;
+    }
+
+    private StringBuilder commandInsertPassStrongbox(ParserOutput p, StringBuilder output) {
+
+        Iterator<AdvObject> it = getCurrentRoom().getObjects().iterator();  //iteratore per scansionare gli oggetti nella stanza
+        while (it.hasNext()) {
+            AdvObject next = it.next();  //oggetto singolo all'interno della stanza
+            if (next.isOpenable() && next instanceof AdvObjectContainer) {
+
+                AdvObjectContainer container = (AdvObjectContainer) next;
+
+                Iterator<AdvObject> nextIt = container.getList().iterator();  //iteratore per scansionere gli oggetti nel contenitore
+                while (nextIt.hasNext()) {
+                    AdvObject nextContainer;
+                    nextContainer = nextIt.next();  //oggetto singolo all'interno del contenitore
+                    if (p.getObject().equals(nextContainer)) {
+                        nextContainer.setOpen(true);
+                    }
+                    nextIt.remove();
+                }
+            }
+
+            output.append("La combinazione e' corretta! Hai sbloccato la cassaforte.");
+        }
+        return output;
     }
 
     private void end(PrintStream out) {
