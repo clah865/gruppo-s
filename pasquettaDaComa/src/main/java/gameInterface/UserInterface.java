@@ -18,7 +18,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Set;
 import adventure.*;
-import type.AdvObject;
 import java.awt.event.KeyEvent;
 
 /**
@@ -30,6 +29,8 @@ public class UserInterface extends javax.swing.JFrame {
     private GameDescription game;
 
     private Parser parser;
+    private String gameTime;
+    private Timer gameT = new Timer();
 
     public class Timer extends Thread {
 
@@ -46,13 +47,13 @@ public class UserInterface extends javax.swing.JFrame {
                     minuti++;
                 }
 
-                String tDisplay = String.format("%02d:%02d", minuti, secondi);
+                gameTime = String.format("%02d:%02d", minuti, secondi);
                 try {
                     Timer.sleep(1000);
                 } catch (InterruptedException ex) {
                     Logger.getLogger(UserInterface.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                gameTimeLabel.setText(tDisplay);
+                gameTimeLabel.setText(gameTime);
 
             }
         }
@@ -71,8 +72,8 @@ public class UserInterface extends javax.swing.JFrame {
     private void init() {
 
         game = new PasquettaDaComa();
-        (new Timer()).start();
-
+        //(new Timer()).start();
+        gameT.start();
         try {
             this.game.init();
         } catch (Exception ex) {
@@ -323,6 +324,7 @@ public class UserInterface extends javax.swing.JFrame {
                 currentRoomLabel.setText(game.getCurrentRoom().getName());
                 gameTextField.setText("");
                 borselloUpdater();
+                checkEnd();
             }
         } catch (NullPointerException e) {
             gameTextArea.setText("Non ho capito cosa devo fare! Prova con un altro comando");
@@ -335,6 +337,15 @@ public class UserInterface extends javax.swing.JFrame {
         game.getInventory().forEach(it -> {
             borselloTextArea.append("- " + it.getName() + "\n");
         });
+    }
+
+    private void checkEnd() {
+        if (game.isEnd()) {
+            gameT.stop();
+            gameTextField.setEditable(false);
+            gameTimeLabel.setText("GIOCO TERMINATO");
+            gameTextArea.append("\nHai concluso il gioco (nel bene o nel male) in: " + gameTime);
+        }
     }
 
     /**
