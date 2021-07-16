@@ -326,6 +326,7 @@ public class UserInterface extends javax.swing.JFrame {
             }
         } catch (NullPointerException e) {
             gameTextArea.setText("Non ho capito cosa devo fare! Prova con un altro comando");
+            gameTextField.setText("");
         }
     }
 

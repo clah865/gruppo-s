@@ -22,6 +22,7 @@ public class PasquettaDaComa extends GameDescription {
     private final String KEY = "chiave";
     private final String SAFE = "cassaforte";
     private final String TELEPHONE = "telefono";
+    private final String DOOR = "porta";
 
     @Override
     public void init() throws Exception {
@@ -54,14 +55,16 @@ public class PasquettaDaComa extends GameDescription {
         open.setAlias(new String[]{});
         getCommands().add(open);
         Command push = new Command(CommandType.PUSH, "premi");
-        push.setAlias(new String[]{"spingi", "attiva"});
+        push.setAlias(new String[]{"bussa", "bussare"});
         getCommands().add(push);
         Command read = new Command(CommandType.READ, "leggi");
+        read.setAlias(new String[]{"inserisci", "inserire", "usa", "utilizza"});
         getCommands().add(read);
         Command insertKey = new Command(CommandType.INSERT_KEY, "inserisci");
         insertKey.setAlias(new String[]{"usa", "utilizza"});
         getCommands().add(insertKey);
         Command knock = new Command(CommandType.KNOCK, "bussa");
+        knock.setAlias(new String[]{"bussare"});
         getCommands().add(knock);
         Command drink = new Command(CommandType.DRINK, "bevi");
         getCommands().add(drink);
@@ -84,9 +87,9 @@ public class PasquettaDaComa extends GameDescription {
         warehouse.setLook("Ci sono dei tavolini e sedie di scorta, sotto uno di questi tavoli c'è nascasta una cassaforte."
                 + "\nA sud c'è una strana porta, diversa dalla porta ad est che riconduce alla stanza principale.");
         Room office = new Room(4, "Ufficio", "E' un ufficio arredato in stile 'Il Padrino', c'è odore di sigaro nell'aria...");
-        office.setLook("Sono presenti diverse poltrone in pelle, una classica scrivania e sul muro è appesa una bacheca. "
-                + "\nNon ci sono finestre, è presente solo una lampada da scrivania e l'unica porta presente è quella a nord "
-                + "\nche ti riconduce al magazzino. (Chissà che affari loschi conducono qui)");
+        office.setLook("Sono presenti poltrone in pelle, una classica scrivania e sul muro è appesa una bacheca. "
+                + "\nNon ci sono finestre, è presente solo una lampada da scrivania e l'unica porta presente è quella"
+                + "\na nord che ti riconduce al magazzino. (Chissà che affari loschi conducono qui)");
         Room bossRoom = new Room(5, "Area ristorante", "E' l'area che il bar utilizza come ristorante. Che fame...");
         bossRoom.setLook("Sono presenti tanti tavoli apparecchiati e arriva una forte luce dalla vetrata. "
                 + "\nC'è un uomo con la mascherina seduto ad un tavolo!");
@@ -108,7 +111,8 @@ public class PasquettaDaComa extends GameDescription {
         office.setLocked(true);
         //obejcts
         //stanza 1 
-        AdvObject telephone = new AdvObject(1, "telefono", "Sei in coma, l'unico modo per svegliarti è entrare nel bar a nord e prendere "
+        AdvObject telephone = new AdvObject(1, "telefono", "C'è un messaggio:"
+                + "\nSei in coma, l'unico modo per svegliarti è entrare nel bar a nord e prendere "
                 + "\ndalla macchinetta un cappuccino alla genovese");
         telephone.setAlias(new String[]{"telefono", "cellulare", "telefonino", "smartphone"});
         garden.getObjects().add(telephone);
@@ -145,11 +149,9 @@ public class PasquettaDaComa extends GameDescription {
         safe.setOpenable(true);
         safe.setPass(true);
         safe.setPickupable(false);
-        safe.setOpen(false);
         warehouse.getObjects().add(safe);
 
-        AdvObject door = new AdvObject(3, "porta", "Una voce simile a quella di Carlo Conti chiede:\nDove si trova Foggia?"
-                + "\nA) Puglia\nB)Iran\nC) Sardegna\n D) Turkmenistan");
+        AdvObject door = new AdvObject(3, "porta", "Una strana porta");
         door.setAlias(new String[]{"portone"});
         door.setPass(true);
         warehouse.getObjects().add(door);
@@ -213,9 +215,11 @@ public class PasquettaDaComa extends GameDescription {
             case OPEN:
                 out = open(p, out);
                 break;
-            case KNOCK:
+            case PUSH:
+                out = knock(p, out);
                 break;
-            case DRINK:
+            case READ:
+                out = insertKey(p, out);
                 break;
             default:
                 out.append("Gli sviluppatori non avevano tempo di implementare questo comando!");
@@ -266,32 +270,29 @@ public class PasquettaDaComa extends GameDescription {
     private StringBuilder insertKey(ParserOutput p, StringBuilder out) {
 
         boolean unlocked = false;
-        //if (p.getObject() != null) {
-            if (getCurrentRoom().getName() == WAREHOUSE_NAME) {
-                for (AdvObject o : getInventory()) {
-                    if (o.getName() == KEY) {
-                        for (AdvObject c : getCurrentRoom().getObjects()) {
-                            if (c.getName() == SAFE) {
-                                c.setOpen(true);
-                                unlocked = true;
-                                getInventory().remove(o);
-                                out.append("Hai aperto la cassaforte!");
-                                break;
-                            }
+
+        if (getCurrentRoom().getName() == WAREHOUSE_NAME) {
+            for (AdvObject o : getInventory()) {
+                if (o.getName() == KEY) {
+                    for (AdvObject c : getCurrentRoom().getObjects()) {
+                        if (c.getName() == SAFE) {
+                            c.setPass(false);
+                            unlocked = true;
+                            getInventory().remove(o);
+                            out.append("Hai sbloccato la cassaforte!");
+                            break;
                         }
                     }
                 }
-            } else {
-                out.append("Luogo sbagliato!");
             }
+        } else {
+            out.append("Luogo sbagliato!");
+        }
 
-            if (unlocked == false) {
-                out.append("Non puoi aprire la cassaforte! Ti manca qualcosa.");
-            }
+        if (unlocked == false) {
+            out.append("Non puoi aprire la cassaforte! Ti manca qualcosa.");
+        }
 
-        //} else {
-            //out.append("Comando non valido!");
-        //}
         return out;
     }
 
@@ -382,6 +383,20 @@ public class PasquettaDaComa extends GameDescription {
                 out.append("Non puoi aprire questo oggetto.");
             }
 
+        }
+        return out;
+    }
+
+    private StringBuilder knock(ParserOutput p, StringBuilder out) {
+        Room nextRoom;
+
+        if (getCurrentRoom().getName() == WAREHOUSE_NAME) {
+            if (p.getObject().getName() == DOOR) {
+                p.getObject().setPass(false);
+                nextRoom = getCurrentRoom().getSouth();
+                nextRoom.setLocked(false);
+                out.append("Hai sbloccato la porta!");
+            }
         }
         return out;
     }
