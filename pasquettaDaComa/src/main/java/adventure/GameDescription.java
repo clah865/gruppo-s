@@ -26,6 +26,16 @@ public abstract class GameDescription {
     private final List<AdvObject> inventory = new ArrayList<>();
 
     private Room currentRoom;
+    
+    private boolean end;
+
+    public boolean isEnd() {
+        return end;
+    }
+
+    public void setEnd(boolean end) {
+        this.end = end;
+    }
 
     public List<Room> getRooms() {
         return rooms;
