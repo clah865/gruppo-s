@@ -23,7 +23,7 @@ public class AdvObject {
 
     private Set<String> alias;
 
-    private String password;
+    private boolean pass = false;
 
     private boolean readable = false;
 
@@ -99,12 +99,12 @@ public class AdvObject {
         this.pushable = pushable;
     }
 
-    public void setPass(String password) {
-        this.password = password;
+    public boolean isPass() {
+        return pass;
     }
 
-    public String getPass() {
-        return password;
+    public void setPass(boolean pass) {
+        this.pass = pass;
     }
 
     public boolean isOpen() {

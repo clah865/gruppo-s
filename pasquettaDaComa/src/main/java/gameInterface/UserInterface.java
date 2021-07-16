@@ -285,13 +285,9 @@ public class UserInterface extends javax.swing.JFrame {
                 + "Altri comandi:\n"
                 + ">> osserva - permette di guardarti intorno ed esaminare l'ambiente circostante\n"
                 + ">> help - stampa una lista dei comandi\n"
-                + ">> esamina [qualcosa] - esamina qualcosa presente nella stanza\n"
+                + ">> inventario - lista e descrizione degli oggetti nell'inventario"
                 + ">> apri [oggetto contenitore] - apri un oggetto specifico\n"
-                + ">> chiudi [oggetto contenitore] - chiudi un oggetto specifico\n"
-                + ">> lascia [oggetto] - lascia un oggetto in una stanza\n"
-                + ">> metti [oggetto] in [oggetto contenitore] - metti un oggetto in un contenitore valido\n"
                 + ">> prendi [oggetto] - prendi un oggetto a terra nella stanza o in un contenitore\n"
-                + ">> parla a [personaggio] - parla ad un personaggio nella stanza\n"
                 + ">> dai [oggetto] a [persona] - dai un oggetto nel tuo inventario ad un personaggio\n"
                 + ">> usa [oggetto] -  usa oggetti presenti nel tuo inventario\n"
                 + "Altri comandi più specifici dovranno essere trovati dal giocatore.\n"
@@ -317,15 +313,19 @@ public class UserInterface extends javax.swing.JFrame {
 
     private void commandReceiver() {
         String command = gameTextField.getText();
-        ParserOutput p = parser.parse(command, game.getCommands(), game.getCurrentRoom().getObjects(), game.getInventory());
-        if (p.getCommand() != null && p.getCommand().getType() == CommandType.END) {
-            gameTextArea.setText("Addio!");
-            System.exit(0);
-        } else {
-            gameTextArea.setText(game.nextMove(p));
-            currentRoomLabel.setText(game.getCurrentRoom().getName());
-            gameTextField.setText("");
-            borselloUpdater();
+        try {
+            ParserOutput p = parser.parse(command, game.getCommands(), game.getCurrentRoom().getObjects(), game.getInventory());
+            if (p.getCommand().getType() == CommandType.END) {
+                gameTextArea.setText("Addio!");
+                System.exit(0);
+            } else {
+                gameTextArea.setText(game.nextMove(p));
+                currentRoomLabel.setText(game.getCurrentRoom().getName());
+                gameTextField.setText("");
+                borselloUpdater();
+            }
+        } catch (NullPointerException e) {
+            gameTextArea.setText("Non ho capito cosa devo fare! Prova con un altro comando");
         }
     }
 
