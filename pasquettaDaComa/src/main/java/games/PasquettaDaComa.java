@@ -28,10 +28,9 @@ public class PasquettaDaComa extends GameDescription {
     private final String TELEPHONE = "telefono";
     private final String DOOR = "porta";
     private final String M_CAFE = "caffe macchiato";
-    private final String CAFE = "caffe";
+    private final String ESPRESSO = "espresso";
     private final String GINSENG = "ginseng";
     private final String MOCACCINO = "mocaccino";
-    private final String C_CAFE = "caffe al cioccolato";
 
     @Override
     public void init() throws Exception {
@@ -122,11 +121,13 @@ public class PasquettaDaComa extends GameDescription {
         AdvObjectContainer distributor = new AdvObjectContainer(2, "macchinetta", "1) Caffè\n 2) Ginseng\n 3) Mocaccino\n 4) Caffè macchiato\n 5) Caffè al cioccolato\n");
         distributor.setAlias(new String[]{"macchinetta", "distributore"});
         distributor.setPass(true);
+        distributor.setOpenable(true);
+        distributor.setPickupable(false);
         mainRoom.getObjects().add(distributor);
 
-        AdvObject cafe = new AdvObject(2, "caffe", "Un classico caffè");
-        cafe.setAlias(new String[]{"caffè", "caffé", "1"});
-        distributor.add(cafe);
+        AdvObject express = new AdvObject(2, "espresso", "Un classico espressino");
+        express.setAlias(new String[]{"espressino", "1"});
+        distributor.add(express);
 
         AdvObject ginseng = new AdvObject(2, "ginseng", "Un classico ginseng");
         ginseng.setAlias(new String[]{"2"});
@@ -137,12 +138,8 @@ public class PasquettaDaComa extends GameDescription {
         distributor.add(mocaccino);
 
         AdvObject mCafe = new AdvObject(2, "caffe macchiato", "Un classico caffè macchiato");
-        mCafe.setAlias(new String[]{"caffè macchiato", "caffé macchiato", "caffe macchiato", "4"});
+        mCafe.setAlias(new String[]{"caffè macchiato", "caffé macchiato", "caffe macchiato", "4", "caffe"});
         distributor.add(mCafe);
-
-        AdvObject cCafe = new AdvObject(2, "caffe al cioccolato", "Un classico caffè al cioccolato");
-        cCafe.setAlias(new String[]{"caffè al cioccolato", "caffé al cioccolato", "caffe al cioccolato", "5"});
-        distributor.add(cCafe);
 
         //stanza 3
         AdvObjectContainer safe = new AdvObjectContainer(3, "cassaforte", "Una strana e misteriosa cassaforte");
@@ -239,7 +236,7 @@ public class PasquettaDaComa extends GameDescription {
                 AdvObject next = it.next();
                 if (next.getName() == M_CAFE) {
                     out = goodEnding(out);
-                } else if (next.getName() == C_CAFE || next.getName() == CAFE || next.getName() == GINSENG || next.getName() == MOCACCINO) {
+                } else if (next.getName() == ESPRESSO || next.getName() == GINSENG || next.getName() == MOCACCINO) {
                     out = badEnding(out);
                 } else if (nextRoom.getName() == BOSSROOM_NAME) {
                     setCurrentRoom(nextRoom);
@@ -348,14 +345,17 @@ public class PasquettaDaComa extends GameDescription {
                     while (nextIt.hasNext()) {
                         AdvObject nextContainer;
                         nextContainer = nextIt.next();  //oggetto singolo all'interno del contenitore
-                        /*if (p.getObject().equals(nextContainer) && getCurrentRoom().getName() == MAINROOM_NAME) {
+                        if (p.getObject().equals(nextContainer) && getCurrentRoom().getName() == MAINROOM_NAME) {
                             for (AdvObject o : getInventory()) {
                                 if (o.getName() == KEY) {  //controllo per macchinetta
                                     getInventory().remove(o);
                                     nextIt.remove();
+                                    nextContainer.setPass(true);
+                                    nextContainer.setOpenable(false);
+                                    
                                 }
                             }
-                        } else*/ if (p.getObject().equals(nextContainer)) {
+                        } else if (p.getObject().equals(nextContainer)) {
                             nextIt.remove();
                         }
                     }
@@ -398,7 +398,7 @@ public class PasquettaDaComa extends GameDescription {
                                 Iterator<AdvObject> it = c.getList().iterator();
                                 while (it.hasNext()) {
                                     AdvObject next = it.next();
-                                    out.append(" " + next.getName());
+                                    out.append("\n" + next.getName());
                                     getCurrentRoom().getObjects().add(next);
                                 }
                                 out.append("");
@@ -416,7 +416,7 @@ public class PasquettaDaComa extends GameDescription {
                         Iterator<AdvObject> it = c.getList().iterator();
                         while (it.hasNext()) {
                             AdvObject next = it.next();
-                            out.append(" " + next.getName());
+                            out.append("\n" + next.getName());
                         }
                         out.append("");
                     } else {
@@ -447,12 +447,16 @@ public class PasquettaDaComa extends GameDescription {
     }
 
     private StringBuilder badEnding(StringBuilder out) {
-        out.append("Purtoppo non ce l'hai fatta... Non sei riuscito a svegliarti dal coma!");
+        out.append("Purtoppo non ce l'hai fatta... "
+                + "\nNon sei riuscito a svegliarti dal coma!");
+        setEnd(true);
         return out;
     }
 
     private StringBuilder goodEnding(StringBuilder out) {
-        out.append("Sei riuscito a risvegliarti dal coma! Adesso puoi ritornare dai tuoi amici!");
+        out.append("Sei riuscito a risvegliarti dal coma! "
+                + "\nAdesso puoi ritornare dai tuoi amici!");
+        setEnd(true);
         return out;
     }
 }
