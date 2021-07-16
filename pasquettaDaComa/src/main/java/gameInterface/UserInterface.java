@@ -16,7 +16,6 @@ import parser.ParserOutput;
 import type.CommandType;
 import java.io.File;
 import java.io.IOException;
-import java.util.Scanner;
 import java.util.Set;
 import adventure.*;
 import java.awt.event.KeyEvent;
@@ -30,6 +29,8 @@ public class UserInterface extends javax.swing.JFrame {
     private GameDescription game;
 
     private Parser parser;
+    private String gameTime;
+    private Timer gameT = new Timer();
 
     public class Timer extends Thread {
 
@@ -46,20 +47,16 @@ public class UserInterface extends javax.swing.JFrame {
                     minuti++;
                 }
 
-                String tDisplay = String.format("%02d:%02d", minuti, secondi);
+                gameTime = String.format("%02d:%02d", minuti, secondi);
                 try {
                     Timer.sleep(1000);
                 } catch (InterruptedException ex) {
                     Logger.getLogger(UserInterface.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                gameTimeLabel.setText(tDisplay);
+                gameTimeLabel.setText(gameTime);
 
             }
         }
-    }
-
-    public void execute() {
-
     }
 
     /**
@@ -75,8 +72,8 @@ public class UserInterface extends javax.swing.JFrame {
     private void init() {
 
         game = new PasquettaDaComa();
-        (new Timer()).start();
-
+        //(new Timer()).start();
+        gameT.start();
         try {
             this.game.init();
         } catch (Exception ex) {
@@ -234,7 +231,7 @@ public class UserInterface extends javax.swing.JFrame {
                         .addComponent(borselloTitleLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
 
         helpMenu.setText("Help");
@@ -289,13 +286,9 @@ public class UserInterface extends javax.swing.JFrame {
                 + "Altri comandi:\n"
                 + ">> osserva - permette di guardarti intorno ed esaminare l'ambiente circostante\n"
                 + ">> help - stampa una lista dei comandi\n"
-                + ">> esamina [qualcosa] - esamina qualcosa presente nella stanza\n"
+                + ">> inventario - lista e descrizione degli oggetti nell'inventario"
                 + ">> apri [oggetto contenitore] - apri un oggetto specifico\n"
-                + ">> chiudi [oggetto contenitore] - chiudi un oggetto specifico\n"
-                + ">> lascia [oggetto] - lascia un oggetto in una stanza\n"
-                + ">> metti [oggetto] in [oggetto contenitore] - metti un oggetto in un contenitore valido\n"
                 + ">> prendi [oggetto] - prendi un oggetto a terra nella stanza o in un contenitore\n"
-                + ">> parla a [personaggio] - parla ad un personaggio nella stanza\n"
                 + ">> dai [oggetto] a [persona] - dai un oggetto nel tuo inventario ad un personaggio\n"
                 + ">> usa [oggetto] -  usa oggetti presenti nel tuo inventario\n"
                 + "Altri comandi più specifici dovranno essere trovati dal giocatore.\n"
@@ -321,14 +314,37 @@ public class UserInterface extends javax.swing.JFrame {
 
     private void commandReceiver() {
         String command = gameTextField.getText();
-        ParserOutput p = parser.parse(command, game.getCommands(), game.getCurrentRoom().getObjects(), game.getInventory());
-        if (p.getCommand() != null && p.getCommand().getType() == CommandType.END) {
-            gameTextArea.setText("Addio!");
-            System.exit(0);
-        } else {
-            gameTextArea.setText(game.nextMove(p));
-            currentRoomLabel.setText(game.getCurrentRoom().getName());
+        try {
+            ParserOutput p = parser.parse(command, game.getCommands(), game.getCurrentRoom().getObjects(), game.getInventory());
+            if (p.getCommand().getType() == CommandType.END) {
+                gameTextArea.setText("Addio!");
+                System.exit(0);
+            } else {
+                gameTextArea.setText(game.nextMove(p));
+                currentRoomLabel.setText(game.getCurrentRoom().getName());
+                gameTextField.setText("");
+                borselloUpdater();
+                checkEnd();
+            }
+        } catch (NullPointerException e) {
+            gameTextArea.setText("Non ho capito cosa devo fare! Prova con un altro comando");
             gameTextField.setText("");
+        }
+    }
+
+    private void borselloUpdater() {
+        borselloTextArea.setText("");
+        game.getInventory().forEach(it -> {
+            borselloTextArea.append("- " + it.getName() + "\n");
+        });
+    }
+
+    private void checkEnd() {
+        if (game.isEnd()) {
+            gameT.stop();
+            gameTextField.setEditable(false);
+            gameTimeLabel.setText("GIOCO TERMINATO");
+            gameTextArea.append("\nHai concluso il gioco (nel bene o nel male) in: " + gameTime);
         }
     }
 
