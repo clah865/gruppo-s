@@ -9,7 +9,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
-//import da engine
 import games.PasquettaDaComa;
 import parser.Parser;
 import parser.ParserOutput;
@@ -22,7 +21,8 @@ import java.awt.event.KeyEvent;
 
 /**
  *
- * @author Clah865
+ * @author Claudio
+ * @autor Francesco
  */
 public class UserInterface extends javax.swing.JFrame {
 
@@ -30,7 +30,7 @@ public class UserInterface extends javax.swing.JFrame {
 
     private Parser parser;
     private String gameTime;
-    private Timer gameT = new Timer();
+    private final Timer gameT = new Timer();
 
     public class Timer extends Thread {
 
