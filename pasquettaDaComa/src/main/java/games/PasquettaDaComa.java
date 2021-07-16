@@ -1,20 +1,20 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package games;
 
 import adventure.GameDescription;
+import java.util.ConcurrentModificationException;
 import parser.ParserOutput;
 import type.AdvObject;
 import type.AdvObjectContainer;
 import type.Command;
 import type.CommandType;
 import type.Room;
-import java.io.PrintStream;
 import java.util.Iterator;
 
+/**
+ *
+ * @autor Francesco
+ * @author Claudio
+ */
 public class PasquettaDaComa extends GameDescription {
 
     private final String WAREHOUSE_NAME = "Magazzino";
@@ -27,10 +27,10 @@ public class PasquettaDaComa extends GameDescription {
     private final String SAFE = "cassaforte";
     private final String TELEPHONE = "telefono";
     private final String DOOR = "porta";
-    private final String M_CAFE = "caffe macchiato";
-    private final String ESPRESSO = "espresso";
+    private final String CAFE = "caffe";
+    /*private final String ESPRESSO = "espresso";
     private final String GINSENG = "ginseng";
-    private final String MOCACCINO = "mocaccino";
+    private final String MOCACCINO = "mocaccino";*/
 
     @Override
     public void init() throws Exception {
@@ -60,7 +60,7 @@ public class PasquettaDaComa extends GameDescription {
         pickup.setAlias(new String[]{"prendi"});
         getCommands().add(pickup);
         Command open = new Command(CommandType.OPEN, "apri");
-        open.setAlias(new String[]{});
+        open.setAlias(new String[]{"accendi"});
         getCommands().add(open);
         Command push = new Command(CommandType.PUSH, "premi");
         push.setAlias(new String[]{"bussa", "bussare"});
@@ -113,7 +113,7 @@ public class PasquettaDaComa extends GameDescription {
         //stanza 1 
         AdvObject telephone = new AdvObject(1, "telefono", "C'è un messaggio:"
                 + "\nSei in coma, l'unico modo per svegliarti è entrare nel bar a nord e prendere "
-                + "\ndalla macchinetta un cappuccino alla genovese e portarlo nella stanza a ovest");
+                + "\ndalla macchinetta un caffe e portarlo nella stanza a ovest");
         telephone.setAlias(new String[]{"telefono", "cellulare", "telefonino", "smartphone"});
         garden.getObjects().add(telephone);
 
@@ -125,21 +125,9 @@ public class PasquettaDaComa extends GameDescription {
         distributor.setPickupable(false);
         mainRoom.getObjects().add(distributor);
 
-        AdvObject express = new AdvObject(2, "espresso", "Un classico espressino");
-        express.setAlias(new String[]{"espressino", "1"});
-        distributor.add(express);
-
-        AdvObject ginseng = new AdvObject(2, "ginseng", "Un classico ginseng");
-        ginseng.setAlias(new String[]{"2"});
-        distributor.add(ginseng);
-
-        AdvObject mocaccino = new AdvObject(2, "mocaccino", "Un classico mocaccino");
-        mocaccino.setAlias(new String[]{"mocaccino", "3"});
-        distributor.add(mocaccino);
-
-        AdvObject mCafe = new AdvObject(2, "caffe macchiato", "Un classico caffè macchiato");
-        mCafe.setAlias(new String[]{"caffè macchiato", "caffé macchiato", "caffe macchiato", "4", "caffe"});
-        distributor.add(mCafe);
+        AdvObject caffe = new AdvObject(2, "caffe", "Un classico caffe");
+        caffe.setAlias(new String[]{"1","caffè","caffé"});
+        distributor.add(caffe);
 
         //stanza 3
         AdvObjectContainer safe = new AdvObjectContainer(3, "cassaforte", "Una strana e misteriosa cassaforte");
@@ -234,13 +222,11 @@ public class PasquettaDaComa extends GameDescription {
             Iterator<AdvObject> it = getInventory().iterator();
             while (it.hasNext()) {
                 AdvObject next = it.next();
-                if (next.getName() == M_CAFE) {
-                    out = goodEnding(out);
-                } else if (next.getName() == ESPRESSO || next.getName() == GINSENG || next.getName() == MOCACCINO) {
-                    out = badEnding(out);
-                } else if (nextRoom.getName() == BOSSROOM_NAME) {
+                if (next.getName() == CAFE) {
+                    out = goodEnding(out);   
+                }  else if (nextRoom.getName() == BOSSROOM_NAME) {
                     setCurrentRoom(nextRoom);
-                    out.append(getCurrentRoom().getDescription());
+                    out.append(getCurrentRoom().getDescription());                  
                 }
             }
         } else if (nextRoom != null) {
@@ -291,7 +277,7 @@ public class PasquettaDaComa extends GameDescription {
                             c.setPass(false);
                             unlocked = true;
                             it.remove();
-                            out.append("Hai sbloccato la cassaforte!");
+                            out.append("Hai sbloccato la cassaforte! Ora puoi aprirla!");
                             break;
                         }
                     }
@@ -311,7 +297,7 @@ public class PasquettaDaComa extends GameDescription {
                         if (c.getName() == DISTRIBUTOR) {
                             c.setPass(false);
                             unlocked = true;
-                            out.append("Adesso puoi prendere una bevanda dalla macchinetta!");
+                            out.append("Hai sbloccato macchinetta! Adesso puoi accenderla!");
                             break;
                         }
                     }
@@ -335,50 +321,75 @@ public class PasquettaDaComa extends GameDescription {
 
         try {
             Iterator<AdvObject> it = getCurrentRoom().getObjects().iterator(); //iteratore per scansionare gli oggetti nella stanza
-            while (it.hasNext()) {
-                AdvObject next = it.next();  //oggetto singolo all'interno della stanza
-                if (next.isOpenable() && next instanceof AdvObjectContainer) {
+            try {
+                while (it.hasNext()) {
+                    AdvObject next = it.next();  //oggetto singolo all'interno della stanza
+                    if (next.isOpenable() && next instanceof AdvObjectContainer) {
 
-                    AdvObjectContainer container = (AdvObjectContainer) next;
+                        AdvObjectContainer container = (AdvObjectContainer) next;
 
-                    Iterator<AdvObject> nextIt = container.getList().iterator();  //iteratore per scansionere gli oggetti nel contenitore
-                    while (nextIt.hasNext()) {
-                        AdvObject nextContainer;
-                        nextContainer = nextIt.next();  //oggetto singolo all'interno del contenitore
-                        if (p.getObject().equals(nextContainer) && getCurrentRoom().getName() == MAINROOM_NAME) {
-                            for (AdvObject o : getInventory()) {
-                                if (o.getName() == KEY) {  //controllo per macchinetta
-                                    getInventory().remove(o);
-                                    nextIt.remove();
-                                    nextContainer.setPass(true);
-                                    nextContainer.setOpenable(false);
-                                    
+                        Iterator<AdvObject> nextIt = container.getList().iterator();  //iteratore per scansionere gli oggetti nel contenitore
+                        while (nextIt.hasNext()) {
+                            AdvObject nextContainer;
+                            nextContainer = nextIt.next();  //oggetto singolo all'interno del contenitore
+                            if (p.getObject().equals(nextContainer) && getCurrentRoom().getName() == MAINROOM_NAME) {
+                                Iterator<AdvObject> invIt = getInventory().iterator();
+                                while (invIt.hasNext()) {
+                                    AdvObject nextInv = invIt.next();
+                                    if (nextInv.getName() == KEY) { //controllo per macchinetta
+                                        invIt.remove();                                     
+
+                                        getInventory().add(p.getObject());
+                                        getCurrentRoom().getObjects().remove(p.getObject());
+
+                                        out.append("Hai preso: " + p.getObject().getName() + "\n");
+                                        out.append(p.getObject().getDescription());
+                                        break;
+                                    }
+
                                 }
+                            } else if (p.getObject().equals(nextContainer)) {
+                                nextIt.remove();
+                                getCurrentRoom().getObjects().remove(p.getObject());
+                                getInventory().add(p.getObject());
+                                out.append("Hai raccolto: " + p.getObject().getName() + "\n");
+                                out.append(p.getObject().getDescription());
+                                break;
+
                             }
-                        } else if (p.getObject().equals(nextContainer)) {
-                            nextIt.remove();
                         }
-                    }
-                }
-                if (p.getObject().equals(next)) {
-                    if (p.getObject().isPickupable()) {
-                        getInventory().add(p.getObject());
-                        getCurrentRoom().getObjects().remove(p.getObject());
-                        out.append("Hai raccolto: " + p.getObject().getName() + "\n");
-                        out.append(p.getObject().getDescription());
-                        break;
+                    } else if (p.getObject().equals(next)) {
+                        if (p.getObject().isPickupable()) {
+                            getInventory().add(p.getObject());
+                            getCurrentRoom().getObjects().remove(p.getObject());
+                            out.append("Hai raccolto: " + p.getObject().getName() + "\n");
+                            out.append(p.getObject().getDescription());
+                            break;
+                        } else {
+                            out.append("Non puoi raccogliere questo oggetto.");
+                        }
                     } else {
-                        out.append("Non puoi raccogliere questo oggetto.");
+                        out.append("Nessun oggetto da raccogliere!");
                     }
                 }
+                return out;
+
+            } catch (ConcurrentModificationException e) { //bug da sistemare viene generato un duplice oggetto
+                if (getCurrentRoom().getName() == WAREHOUSE_NAME) {
+                    getCurrentRoom().getObjects().remove(p.getObject());
+                    out.append("");
+                }
+                if (getCurrentRoom().getName() == MAINROOM_NAME) {
+                   out.append("mmmmmmmm");
+                }
+
+                return out;
             }
-            return out;
 
         } catch (NullPointerException e) {
             out.append("Non c'è niente da raccogliere qui.");
             return out;
         }
-        //return out;
     }
 
     private StringBuilder open(ParserOutput p, StringBuilder out) {
@@ -405,7 +416,7 @@ public class PasquettaDaComa extends GameDescription {
                             }
                         }
                     } else {
-                        out.append("Non puoi aprire questo oggetto. Hai bisogno di una chiave!");
+                        out.append("Non puoi ancora aprire questo oggetto! Hai bisogno di qualcosa..");
                     }
 
                 } else {
@@ -446,15 +457,8 @@ public class PasquettaDaComa extends GameDescription {
         return out;
     }
 
-    private StringBuilder badEnding(StringBuilder out) {
-        out.append("Purtoppo non ce l'hai fatta... "
-                + "\nNon sei riuscito a svegliarti dal coma!");
-        setEnd(true);
-        return out;
-    }
-
     private StringBuilder goodEnding(StringBuilder out) {
-        out.append("Sei riuscito a risvegliarti dal coma! "
+        out.append("\n\nSei riuscito a risvegliarti dal coma! "
                 + "\nAdesso puoi ritornare dai tuoi amici!");
         setEnd(true);
         return out;

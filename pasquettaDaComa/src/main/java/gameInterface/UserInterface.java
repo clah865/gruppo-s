@@ -9,7 +9,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
-//import da engine
 import games.PasquettaDaComa;
 import parser.Parser;
 import parser.ParserOutput;
@@ -22,7 +21,8 @@ import java.awt.event.KeyEvent;
 
 /**
  *
- * @author Clah865
+ * @author Claudio
+ * @autor Francesco
  */
 public class UserInterface extends javax.swing.JFrame {
 
@@ -30,7 +30,7 @@ public class UserInterface extends javax.swing.JFrame {
 
     private Parser parser;
     private String gameTime;
-    private Timer gameT = new Timer();
+    private final Timer gameT = new Timer();
 
     public class Timer extends Thread {
 
@@ -80,17 +80,16 @@ public class UserInterface extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
         }
 
-        //sicuramente è da cambiare la sua posizione
         try {
             Set<String> stopwords = Utils.loadFileListInSet(new File("./resources/stopwords"));
             parser = new Parser(stopwords);
         } catch (IOException ex) {
-            System.err.println(ex);
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
         }
 
-        gameTextArea.setText("====================================================================");
+        gameTextArea.setText("=================================================================");
         gameTextArea.append("\n\t\t    | Pasquetta da Coma |");
-        gameTextArea.append("\n====================================================================\n");
+        gameTextArea.append("\n=================================================================\n");
         currentRoomLabel.setText(game.getCurrentRoom().getName());
         gameTextArea.append("");
         gameTextArea.append(game.getCurrentRoom().getDescription());
@@ -231,7 +230,7 @@ public class UserInterface extends javax.swing.JFrame {
                         .addComponent(borselloTitleLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(31, Short.MAX_VALUE))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
 
         helpMenu.setText("Help");
