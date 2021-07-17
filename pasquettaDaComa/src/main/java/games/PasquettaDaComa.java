@@ -88,7 +88,8 @@ public class PasquettaDaComa extends GameDescription {
                 + "\na comando vocale (servirà leggere la password?)."
                 + "\nA sud c'è una strana porta, diversa dalla porta ad est che riconduce alla stanza principale.");
         Room office = new Room(4, "Ufficio", "E' un ufficio arredato in stile 'Il Padrino', c'è odore di sigaro nell'aria...");
-        office.setLook("Sono presenti poltrone in pelle, una classica scrivania e sul muro è appesa una bacheca con una nota attaccata. "
+        office.setLook("Sono presenti poltrone in pelle, una classica scrivania e sul muro è appesa una bacheca "
+                + "\ncon una nota attaccata. "
                 + "\nNon ci sono finestre, è presente solo una lampada da scrivania e l'unica porta presente è quella"
                 + "\na nord che ti riconduce al magazzino. (Chissà che affari loschi conducono qui)");
         Room bossRoom = new Room(5, "Area ristorante", "E' l'area che il bar utilizza come ristorante. Che fame...");
