@@ -288,7 +288,7 @@ public class UserInterface extends javax.swing.JFrame {
                 + ">> inventario - lista e descrizione degli oggetti nell'inventario"
                 + ">> apri [oggetto contenitore] - apri un oggetto specifico\n"
                 + ">> prendi [oggetto] - prendi un oggetto a terra nella stanza o in un contenitore\n"
-                + ">> dai [oggetto] a [persona] - dai un oggetto nel tuo inventario ad un personaggio\n"
+                + ">> bussa [oggetto] - per bussare \n"
                 + ">> usa [oggetto] -  usa oggetti presenti nel tuo inventario\n"
                 + "Altri comandi più specifici dovranno essere trovati dal giocatore.\n"
                 + "\n");
@@ -296,9 +296,8 @@ public class UserInterface extends javax.swing.JFrame {
 
     private void aboutMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutMenuActionPerformed
         JOptionPane.showMessageDialog(this, "Pasquetta da Coma è un gioco d'avventura testuale, \nnel quale puoi inserire dei comandi da tastiera "
-                + "per esplorare la mappa \ne risolvere i vari enigmi presenti all'interno del gioco. \nRicordati di raccogliere gli oggetti "
-                + "per proseguire con l'avventura.\n\nSfruttare le descrizioni degli oggetti sarà fondamentale \nper proseguire la storia e"
-                + "ricoradti sempre\n\n Fai sempre la scelta giusta!!", "Pasquetta da Coma", JOptionPane.PLAIN_MESSAGE);
+                + "per esplorare la mappa \ne riuscire a tornare dai tuoi amici. \nRicordati di raccogliere gli oggetti "
+                + "per proseguire con l'avventura.\n\n Buona avventura!!", "Pasquetta da Coma", JOptionPane.PLAIN_MESSAGE);
     }//GEN-LAST:event_aboutMenuActionPerformed
 
     private void sendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendButtonActionPerformed
