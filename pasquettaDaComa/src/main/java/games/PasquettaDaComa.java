@@ -223,7 +223,7 @@ public class PasquettaDaComa extends GameDescription {
             while (it.hasNext()) {
                 AdvObject next = it.next();
                 if (next.getName() == CAFE) {
-                    out = goodEnding(out);   
+                    out = end(out);   
                 }  else if (nextRoom.getName() == BOSSROOM_NAME) {
                     setCurrentRoom(nextRoom);
                     out.append(getCurrentRoom().getDescription());                  
@@ -457,7 +457,7 @@ public class PasquettaDaComa extends GameDescription {
         return out;
     }
 
-    private StringBuilder goodEnding(StringBuilder out) {
+    private StringBuilder end(StringBuilder out) {
         out.append("\n\nSei riuscito a risvegliarti dal coma! "
                 + "\nAdesso puoi ritornare dai tuoi amici!");
         setEnd(true);
